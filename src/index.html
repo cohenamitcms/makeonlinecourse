@@ -1,17 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="styles.css">
   <title>Make Online Course</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
-
 <body>
-  <main>
-    <h1>Make Online Course</h1>
-  </main>
-</body>
+<header class="header">
+  <div class="container">
+    <h1>Create Your Online Course</h1>
+    <p>Use AI to generate your course content effortlessly.</p>
+  </div>
+</header>
 
+<main class="main-content">
+  <div class="container">
+    <section class="form-section">
+      <form id="courseForm" action="https://docs.google.com/forms/d/e/1FAIpQLSemaclvFT6-CT6lCv_a9cffxnVPWWH_3SyubKoJUx2iuUDjzQ/formResponse" method="POST" target="_self">
+        <div class="form-group">
+          <label for="courseTitle">Course Title</label>
+          <input type="text" id="courseTitle" name="entry.87097577" required>
+        </div>
+
+        <div class="form-group">
+          <label for="courseDescription">Course Description</label>
+          <textarea id="courseDescription" name="entry.681228756" rows="5" required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="courseLevel">Level</label>
+          <select id="courseLevel" name="entry.124323297" required>
+            <option value="" disabled selected>Select Level</option>
+            <option value="Beginner">Beginner</option>
+            <option value="Intermediate">Intermediate</option>
+            <option value="Expert">Expert</option>
+            <option value="All Levels">All Levels</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="courseDuration">How long do you want the course to be?</label>
+          <select id="courseDuration" name="entry.1539376226" required>
+            <option value="" disabled selected>Select Duration</option>
+            <option value="Under 1 hour">Under 1 hour</option>
+            <option value="1-2 hours">1-2 hours</option>
+            <option value="2-3 hours">2-3 hours</option>
+            <option value="3-4 hours">3-4 hours</option>
+            <option value="4-5 hours">4-5 hours</option>
+            <option value="5-6 hours">5-6 hours</option>
+            <option value="6-7 hours">6-7 hours</option>
+            <option value="Over 7 hours">Over 7 hours</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <button type="submit" class="submit-button">Submit</button>
+        </div>
+      </form>
+    </section>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <p>&copy; 2024 Amit Marmari</p>
+  </div>
+</footer>
+</body>
 </html>
