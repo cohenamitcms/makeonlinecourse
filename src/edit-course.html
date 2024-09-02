@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Course Data</title>
+    <style>
+        /* Your CSS styles */
+    </style>
+</head>
+<body>
+<h1>Edit Course Details</h1>
+<form id="courseForm">
+    <label for="courseTitle">Course Title:</label>
+    <input type="text" id="courseTitle" name="courseTitle">
+
+    <label for="courseDescription">Course Description:</label>
+    <textarea id="courseDescription" name="courseDescription"></textarea>
+
+    <div id="modules">
+        <!-- Modules and Lessons will be dynamically generated here -->
+    </div>
+
+    <input type="submit" value="Save Changes">
+</form>
+
+<script>
+    // Function to populate form fields from the JSON data
+    function populateForm(data) {
+      document.getElementById('courseTitle').value = data.courseTitle || '';
+      document.getElementById('courseDescription').value = data.courseDescription || '';
+
+      const modulesDiv = document.getElementById('modules');
+      modulesDiv.innerHTML = '';  // Clear existing content
+
+      data.modules.forEach((module, moduleIndex) => {
+        const moduleDiv = document.createElement('div');
+        moduleDiv.className = 'module';
+
+        const moduleLabel = document.createElement('label');
+        moduleLabel.innerText = `${module.name} (${module.time})`;
+        moduleDiv.appendChild(moduleLabel);
+
+        module.lessons.forEach((lesson, lessonIndex) => {
+          const lessonDiv = document.createElement('div');
+          lessonDiv.className = 'lesson';
+
+          const lessonInput = document.createElement('input');
+          lessonInput.type = 'text';
+          lessonInput.name = `module${moduleIndex + 1}_lesson${lessonIndex + 1}`;
+          lessonInput.value = `${lesson.name} (${lesson.time})`;
+          lessonDiv.appendChild(lessonInput);
+
+          moduleDiv.appendChild(lessonDiv);
+        });
+
+        modulesDiv.appendChild(moduleDiv);
+      });
+    }
+
+    // Function to get JSON data from a POST request
+    function getPostData() {
+      return new Promise((resolve, reject) => {
+        // Check if the browser supports the fetch API
+        if (window.fetch) {
+          fetch(window.location.href, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          })
+            .then(response => response.json())
+            .then(data => resolve(data))
+            .catch(error => reject(error));
+        } else {
+          reject('Fetch API not supported');
+        }
+      });
+    }
+
+    // Handle the incoming POST data
+    getPostData()
+      .then(data => {
+        populateForm(data);
+      })
+      .catch(error => console.error('Error fetching POST data:', error));
+
+    // Handle form submission
+    document.getElementById('courseForm').onsubmit = function(event) {
+      event.preventDefault();
+      const courseData = {
+        courseTitle: document.getElementById('courseTitle').value,
+        courseDescription: document.getElementById('courseDescription').value,
+        modules: []
+      };
+
+      const modulesDiv = document.getElementById('modules').children;
+      for (let i = 0; i < modulesDiv.length; i++) {
+        const moduleDiv = modulesDiv[i];
+        const moduleData = {
+          name: moduleDiv.querySelector('label').innerText.split(' (')[0],
+          time: moduleDiv.querySelector('label').innerText.split(' (')[1].replace(')', '').trim(),
+          lessons: []
+        };
+
+        const lessonsDiv = moduleDiv.getElementsByClassName('lesson');
+        for (let j = 0; j < lessonsDiv.length; j++) {
+          const lessonInput = lessonsDiv[j].querySelector('input');
+          const [lessonName, lessonTime] = lessonInput.value.split(' (');
+          moduleData.lessons.push({
+            name: lessonName.trim(),
+            time: lessonTime.replace(')', '').trim()
+          });
+        }
+
+        courseData.modules.push(moduleData);
+      }
+
+      console.log(JSON.stringify(courseData));  // Output updated data to the console
+      // You can send this updated data back to your server or store it locally
+    };
+</script>
+</body>
+</html>
