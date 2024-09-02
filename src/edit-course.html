@@ -3,16 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Course Structure</title>
+    <title>Edit Course Data</title>
     <link rel="stylesheet" href="styles.css"> <!-- Link to your main CSS -->
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 20px;
+            margin: 0;
+            padding: 0;
             background-color: #f9f9f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            width: 600px;
+            max-width: 100%;
+            text-align: center;
         }
         h1 {
             color: #333;
+            margin-bottom: 10px;
         }
         .instruction {
             margin-bottom: 20px;
@@ -20,10 +35,8 @@
             color: #555;
         }
         form {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+            text-align: left;
         }
         label {
             display: block;
@@ -31,25 +44,42 @@
             font-weight: bold;
         }
         input[type="text"], textarea {
-            width: 100%;
+            width: calc(100% - 20px);
             padding: 8px;
             margin-bottom: 10px;
             border: 1px solid #ccc;
             border-radius: 4px;
+            display: inline-block;
         }
         .module, .lesson {
             margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-        .module > label {
+        .module label, .lesson label {
             font-size: 18px;
             font-weight: bold;
             color: #007bff;
             margin-bottom: 10px;
+            flex: 1;
         }
-        .lesson > input[type="text"] {
-            width: calc(100% - 20px);
+        .module input[type="text"], .lesson input[type="text"] {
+            flex: 2;
             padding: 6px;
-            margin-left: 20px;
+            margin-left: 10px;
+        }
+        .module button, .lesson button {
+            margin-left: 10px;
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .module button:hover, .lesson button:hover {
+            background-color: #c82333;
         }
         input[type="submit"] {
             background-color: #28a745;
@@ -65,121 +95,131 @@
     </style>
 </head>
 <body>
-<h1>Edit Course Details</h1>
-<p class="instruction">Please review and modify the modules and times as necessary.</p>
-<form id="courseForm">
-    <label for="courseTitle">Course Title:</label>
-    <input type="text" id="courseTitle" name="courseTitle">
+<div class="container">
+    <h1>Edit Course Details</h1>
+    <p class="instruction">Please review and modify the modules and times as necessary.</p>
+    <form id="courseForm">
+        <label for="courseTitle">Course Title:</label>
+        <input type="text" id="courseTitle" name="courseTitle">
 
-    <label for="courseDescription">Course Description:</label>
-    <textarea id="courseDescription" name="courseDescription"></textarea>
+        <label for="courseDescription">Course Description:</label>
+        <textarea id="courseDescription" name="courseDescription"></textarea>
 
-    <div id="modules">
-        <!-- Modules and Lessons will be dynamically generated here -->
-    </div>
+        <div id="modules">
+            <!-- Modules and Lessons will be dynamically generated here -->
+        </div>
 
-    <input type="submit" value="Save Changes">
-</form>
+        <input type="submit" value="Save Changes">
+    </form>
+</div>
 
 <script>
     // Function to extract data from URL query parameters
     function getQueryParams() {
-      const params = {};
-      window.location.search.substring(1).split('&').forEach(pair => {
-        const [key, value] = pair.split('=');
-        params[decodeURIComponent(key)] = decodeURIComponent(value || '');
-      });
-      return params;
+        const params = {};
+        window.location.search.substring(1).split('&').forEach(pair => {
+            const [key, value] = pair.split('=');
+            params[decodeURIComponent(key)] = decodeURIComponent(value || '');
+        });
+        return params;
     }
 
     // Function to populate form fields from the JSON data
     function populateForm(data) {
-      document.getElementById('courseTitle').value = data.courseTitle || '';
-      document.getElementById('courseDescription').value = data.courseDescription || '';
+        document.getElementById('courseTitle').value = data.courseTitle || '';
+        document.getElementById('courseDescription').value = data.courseDescription || '';
 
-      const modulesDiv = document.getElementById('modules');
-      modulesDiv.innerHTML = '';  // Clear existing content
+        const modulesDiv = document.getElementById('modules');
+        modulesDiv.innerHTML = '';  // Clear existing content
 
-      data.modules.forEach((module, moduleIndex) => {
-        const moduleDiv = document.createElement('div');
-        moduleDiv.className = 'module';
+        data.modules.forEach((module, moduleIndex) => {
+            const moduleDiv = document.createElement('div');
+            moduleDiv.className = 'module';
 
-        const moduleNameInput = document.createElement('input');
-        moduleNameInput.type = 'text';
-        moduleNameInput.value = module.name;
-        moduleDiv.appendChild(moduleNameInput);
+            const moduleLabel = document.createElement('label');
+            moduleLabel.innerText = `Module ${moduleIndex + 1}: ${module.name}`;
+            moduleDiv.appendChild(moduleLabel);
 
-        const moduleTimeInput = document.createElement('input');
-        moduleTimeInput.type = 'text';
-        moduleTimeInput.value = module.time;
-        moduleTimeInput.style = 'margin-left: 10px;';
-        moduleDiv.appendChild(moduleTimeInput);
+            const moduleTimeInput = document.createElement('input');
+            moduleTimeInput.type = 'text';
+            moduleTimeInput.value = module.time;
+            moduleDiv.appendChild(moduleTimeInput);
 
-        module.lessons.forEach((lesson, lessonIndex) => {
-          const lessonDiv = document.createElement('div');
-          lessonDiv.className = 'lesson';
+            const deleteModuleBtn = document.createElement('button');
+            deleteModuleBtn.type = 'button';
+            deleteModuleBtn.innerText = 'Delete Module';
+            deleteModuleBtn.onclick = () => moduleDiv.remove();
+            moduleDiv.appendChild(deleteModuleBtn);
 
-          const lessonInput = document.createElement('input');
-          lessonInput.type = 'text';
-          lessonInput.value = `${lesson.name}`;
-          lessonDiv.appendChild(lessonInput);
+            module.lessons.forEach((lesson, lessonIndex) => {
+                const lessonDiv = document.createElement('div');
+                lessonDiv.className = 'lesson';
 
-          const lessonTimeInput = document.createElement('input');
-          lessonTimeInput.type = 'text';
-          lessonTimeInput.value = `${lesson.time}`;
-          lessonTimeInput.style = 'margin-left: 10px;';
-          lessonDiv.appendChild(lessonTimeInput);
+                const lessonLabel = document.createElement('label');
+                lessonLabel.innerText = `Lesson ${moduleIndex + 1}.${lessonIndex + 1}: ${lesson.name}`;
+                lessonDiv.appendChild(lessonLabel);
 
-          moduleDiv.appendChild(lessonDiv);
+                const lessonTimeInput = document.createElement('input');
+                lessonTimeInput.type = 'text';
+                lessonTimeInput.value = lesson.time;
+                lessonDiv.appendChild(lessonTimeInput);
+
+                const deleteLessonBtn = document.createElement('button');
+                deleteLessonBtn.type = 'button';
+                deleteLessonBtn.innerText = 'Delete Lesson';
+                deleteLessonBtn.onclick = () => lessonDiv.remove();
+                lessonDiv.appendChild(deleteLessonBtn);
+
+                moduleDiv.appendChild(lessonDiv);
+            });
+
+            modulesDiv.appendChild(moduleDiv);
         });
-
-        modulesDiv.appendChild(moduleDiv);
-      });
     }
 
     // Parse query parameters and decode the JSON string
     const params = getQueryParams();
     if (params.data) {
-      try {
-        const data = JSON.parse(decodeURIComponent(params.data));
-        populateForm(data);
-      } catch (e) {
-        console.error('Error parsing JSON data:', e);
-      }
+        try {
+            const data = JSON.parse(decodeURIComponent(params.data));
+            populateForm(data);
+        } catch (e) {
+            console.error('Error parsing JSON data:', e);
+        }
     }
 
     // Handle form submission
     document.getElementById('courseForm').onsubmit = function(event) {
-      event.preventDefault();
-      const courseData = {
-        courseTitle: document.getElementById('courseTitle').value,
-        courseDescription: document.getElementById('courseDescription').value,
-        modules: []
-      };
-
-      const modulesDiv = document.getElementById('modules').children;
-      for (let i = 0; i < modulesDiv.length; i++) {
-        const moduleDiv = modulesDiv[i];
-        const moduleData = {
-          name: moduleDiv.querySelector('input[type="text"]').value,
-          time: moduleDiv.querySelectorAll('input[type="text"]')[1].value,
-          lessons: []
+        event.preventDefault();
+        const courseData = {
+            courseTitle: document.getElementById('courseTitle').value,
+            courseDescription: document.getElementById('courseDescription').value,
+            modules: []
         };
 
-        const lessonsDiv = moduleDiv.getElementsByClassName('lesson');
-        for (let j = 0; j < lessonsDiv.length; j++) {
-          const lessonInputs = lessonsDiv[j].getElementsByTagName('input');
-          moduleData.lessons.push({
-            name: lessonInputs[0].value.trim(),
-            time: lessonInputs[1].value.trim()
-          });
+        const modulesDiv = document.getElementById('modules').children;
+        for (let i = 0; i < modulesDiv.length; i++) {
+            const moduleDiv = modulesDiv[i];
+            const moduleData = {
+                name: moduleDiv.querySelector('label').innerText.split(': ')[1],
+                time: moduleDiv.querySelector('input[type="text"]').value,
+                lessons: []
+            };
+
+            const lessonsDiv = moduleDiv.getElementsByClassName('lesson');
+            for (let j = 0; j < lessonsDiv.length; j++) {
+                const lessonInputs = lessonsDiv[j].getElementsByTagName('input');
+                moduleData.lessons.push({
+                    name: lessonsDiv[j].querySelector('label').innerText.split(': ')[1],
+                    time: lessonInputs[0].value.trim()
+                });
+            }
+
+            courseData.modules.push(moduleData);
         }
 
-        courseData.modules.push(moduleData);
-      }
-
-      console.log(JSON.stringify(courseData));  // Output updated data to the console
-      // You can send this updated data back to your server or store it locally
+        console.log(JSON.stringify(courseData));  // Output updated data to the console
+        // You can send this updated data back to your server or store it locally
     };
 </script>
 </body>
