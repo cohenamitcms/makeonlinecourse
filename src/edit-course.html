@@ -71,6 +71,11 @@
             width: 80px;
             margin-left: 10px;
         }
+        .time-input input {
+            width: 100%;
+            padding: 6px;
+            box-sizing: border-box;
+        }
         .delete-button {
             margin-left: 10px;
             background-color: #dc3545;
@@ -82,6 +87,18 @@
         }
         .delete-button:hover {
             background-color: #c82333;
+        }
+        .calc-button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .calc-button:hover {
+            background-color: #0056b3;
         }
         input[type="submit"] {
             background-color: #28a745;
@@ -113,6 +130,7 @@
             <!-- Modules and Lessons will be dynamically generated here -->
         </div>
 
+        <button type="button" class="calc-button" onclick="recalculateTimes()">Recalculate Module Times</button>
         <input type="submit" value="Save Changes">
     </form>
 </div>
@@ -136,6 +154,20 @@
             }
         });
         return totalMinutes + ' minutes';
+    }
+
+    function recalculateTimes() {
+        const modulesDiv = document.getElementById('modules').children;
+        for (let i = 0; i < modulesDiv.length; i++) {
+            const moduleDiv = modulesDiv[i];
+            const moduleTimeSpan = moduleDiv.querySelector('.time-input span');
+            const lessons = Array.from(moduleDiv.getElementsByClassName('lesson'));
+            const lessonTimes = lessons.map(lessonDiv => {
+                const timeInput = lessonDiv.querySelector('.time-input input');
+                return { time: timeInput.value.trim() };
+            });
+            moduleTimeSpan.innerText = calculateModuleTime(lessonTimes);
+        }
     }
 
     function updateLessonNumbers(moduleDiv) {
@@ -196,7 +228,7 @@
                 lessonContent.value = lesson.name;
 
                 const lessonTimeInput = document.createElement('input');
-                lessonTimeInput.type = 'text';
+                lessonTimeInput.type = 'number';
                 lessonTimeInput.className = 'time-input';
                 lessonTimeInput.value = lesson.time;
 
