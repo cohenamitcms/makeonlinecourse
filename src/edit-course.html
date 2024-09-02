@@ -13,7 +13,7 @@
             background-color: #f9f9f9;
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: flex-start;
             height: 100vh;
         }
         .container {
@@ -21,9 +21,10 @@
             padding: 30px;
             border-radius: 10px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            width: 600px;
+            width: 800px;
             max-width: 100%;
             text-align: center;
+            margin-top: 20px;
         }
         h1 {
             color: #333;
@@ -58,6 +59,7 @@
             display: inline-block;
             font-weight: bold;
             color: #007bff;
+            margin-right: 10px;
         }
         .module-content, .lesson-content {
             display: inline-block;
@@ -116,7 +118,6 @@
 </div>
 
 <script>
-    // Function to extract data from URL query parameters
     function getQueryParams() {
         const params = {};
         window.location.search.substring(1).split('&').forEach(pair => {
@@ -126,17 +127,36 @@
         return params;
     }
 
-    // Function to populate form fields from the JSON data
+    function calculateModuleTime(lessons) {
+        let totalMinutes = 0;
+        lessons.forEach(lesson => {
+            const minutes = parseInt(lesson.time);
+            if (!isNaN(minutes)) {
+                totalMinutes += minutes;
+            }
+        });
+        return totalMinutes + ' minutes';
+    }
+
+    function updateLessonNumbers(moduleDiv) {
+        const lessons = moduleDiv.getElementsByClassName('lesson');
+        for (let i = 0; i < lessons.length; i++) {
+            const lessonHeader = lessons[i].querySelector('.lesson-header');
+            lessonHeader.innerText = `Lesson ${moduleDiv.dataset.moduleIndex}.${i + 1}:`;
+        }
+    }
+
     function populateForm(data) {
         document.getElementById('courseTitle').value = data.courseTitle || '';
         document.getElementById('courseDescription').value = data.courseDescription || '';
 
         const modulesDiv = document.getElementById('modules');
-        modulesDiv.innerHTML = '';  // Clear existing content
+        modulesDiv.innerHTML = '';
 
         data.modules.forEach((module, moduleIndex) => {
             const moduleDiv = document.createElement('div');
             moduleDiv.className = 'module';
+            moduleDiv.dataset.moduleIndex = moduleIndex + 1;
 
             const moduleHeader = document.createElement('span');
             moduleHeader.className = 'module-header';
@@ -147,10 +167,9 @@
             moduleContent.className = 'module-content';
             moduleContent.value = module.name;
 
-            const moduleTimeInput = document.createElement('input');
-            moduleTimeInput.type = 'text';
-            moduleTimeInput.className = 'time-input';
-            moduleTimeInput.value = module.time;
+            const moduleTime = document.createElement('span');
+            moduleTime.className = 'time-input';
+            moduleTime.innerText = calculateModuleTime(module.lessons);
 
             const deleteModuleBtn = document.createElement('button');
             deleteModuleBtn.type = 'button';
@@ -160,7 +179,7 @@
 
             moduleDiv.appendChild(moduleHeader);
             moduleDiv.appendChild(moduleContent);
-            moduleDiv.appendChild(moduleTimeInput);
+            moduleDiv.appendChild(moduleTime);
             moduleDiv.appendChild(deleteModuleBtn);
 
             module.lessons.forEach((lesson, lessonIndex) => {
@@ -185,7 +204,11 @@
                 deleteLessonBtn.type = 'button';
                 deleteLessonBtn.className = 'delete-button';
                 deleteLessonBtn.innerText = 'Delete Lesson';
-                deleteLessonBtn.onclick = () => lessonDiv.remove();
+                deleteLessonBtn.onclick = () => {
+                    lessonDiv.remove();
+                    updateLessonNumbers(moduleDiv);
+                    moduleTime.innerText = calculateModuleTime(Array.from(moduleDiv.getElementsByClassName('lesson')));
+                };
 
                 lessonDiv.appendChild(lessonHeader);
                 lessonDiv.appendChild(lessonContent);
@@ -199,7 +222,6 @@
         });
     }
 
-    // Parse query parameters and decode the JSON string
     const params = getQueryParams();
     if (params.data) {
         try {
@@ -210,7 +232,6 @@
         }
     }
 
-    // Handle form submission
     document.getElementById('courseForm').onsubmit = function(event) {
         event.preventDefault();
         const courseData = {
@@ -224,7 +245,7 @@
             const moduleDiv = modulesDiv[i];
             const moduleData = {
                 name: moduleDiv.querySelector('.module-content').value,
-                time: moduleDiv.querySelector('.time-input').value,
+                time: moduleDiv.querySelector('.time-input').innerText,
                 lessons: []
             };
 
