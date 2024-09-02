@@ -153,12 +153,13 @@
                 totalMinutes += lessonTime;
             }
         }
-        return totalMinutes + ' minutes';
+        return totalMinutes;
     }
 
     function updateModuleTime(moduleDiv) {
         const moduleTimeSpan = moduleDiv.querySelector('.time-input');
-        moduleTimeSpan.innerText = calculateModuleTime(moduleDiv);
+        const totalMinutes = calculateModuleTime(moduleDiv);
+        moduleTimeSpan.innerText = totalMinutes + ' minutes';
     }
 
     function updateLessonNumbers(moduleDiv) {
@@ -193,7 +194,7 @@
 
                 const moduleTime = document.createElement('span');
                 moduleTime.className = 'time-input';
-                moduleTime.innerText = calculateModuleTime(moduleDiv);
+                moduleTime.innerText = calculateModuleTime(moduleDiv) + ' minutes';
 
                 const deleteModuleBtn = document.createElement('button');
                 deleteModuleBtn.type = 'button';
@@ -250,7 +251,7 @@
                 });
 
                 modulesDiv.appendChild(moduleDiv);
-                moduleTime.innerText = calculateModuleTime(moduleDiv); // Calculate module time initially
+                updateModuleTime(moduleDiv); // Calculate and update module time initially
             });
         } catch (error) {
             console.error('Error populating form:', error);
@@ -302,5 +303,6 @@
         // You can send this updated data back to your server or store it locally
     };
 </script>
+
 </body>
 </html>
