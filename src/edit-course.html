@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Course Editor</title>
+    <title>Edit Course Data</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -155,10 +155,12 @@
         let totalMinutes = 0;
         for (let i = 0; i < lessonDivs.length; i++) {
             const lessonTime = parseInt(lessonDivs[i].querySelector('.time-input input').value);
+            console.log(`Lesson ${i+1} time:`, lessonTime); // Log each lesson time
             if (!isNaN(lessonTime)) {
                 totalMinutes += lessonTime;
             }
         }
+        console.log(`Total module time: ${totalMinutes}`); // Log total module time
         return totalMinutes;
     }
 
@@ -178,15 +180,8 @@
                 totalCourseMinutes += moduleTime;
             }
         }
+        console.log(`Total course time: ${totalCourseMinutes} minutes`); // Log total course time
         document.getElementById('totalCourseTime').innerText = `Total Course Time: ${totalCourseMinutes} minutes`;
-    }
-
-    function updateLessonNumbers(moduleDiv) {
-        const lessons = moduleDiv.getElementsByClassName('lesson');
-        for (let i = 0; i < lessons.length; i++) {
-            const lessonHeader = lessons[i].querySelector('.lesson-header');
-            lessonHeader.innerText = `Lesson ${moduleDiv.dataset.moduleIndex}.${i + 1}:`;
-        }
     }
 
     function populateForm(data) {
@@ -259,7 +254,6 @@
                     deleteLessonBtn.innerText = 'Delete Lesson';
                     deleteLessonBtn.onclick = () => {
                         lessonDiv.remove();
-                        updateLessonNumbers(moduleDiv);
                         updateModuleTime(moduleDiv);
                     };
 
@@ -275,6 +269,8 @@
                 modulesDiv.appendChild(moduleDiv);
                 updateModuleTime(moduleDiv); // Calculate and update module time initially
             });
+
+            updateTotalCourseTime(); // Update total course time initially
         } catch (error) {
             console.error('Error populating form:', error);
         }
@@ -284,7 +280,7 @@
     if (params.data) {
         try {
             const data = JSON.parse(decodeURIComponent(params.data));
-            console.log("Parsed Data: ", data); // For debugging purposes
+            console.log("Parsed Data: ", data); // Log the parsed data for debugging
             populateForm(data);
         } catch (e) {
             console.error('Error parsing JSON data:', e);
