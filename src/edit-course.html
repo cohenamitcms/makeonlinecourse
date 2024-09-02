@@ -151,143 +151,141 @@
     }
 
     function calculateModuleTime(moduleDiv) {
-        const lessonDivs = moduleDiv.getElementsByClassName('lesson');
-        let totalMinutes = 0;
-        for (let i = 0; i < lessonDivs.length; i++) {
-            const lessonTime = parseInt(lessonDivs[i].querySelector('.time-input input').value);
-            console.log(`Lesson ${i+1} time:`, lessonTime); // Log each lesson time
-            if (!isNaN(lessonTime)) {
-                totalMinutes += lessonTime;
-            }
+    const lessonDivs = moduleDiv.getElementsByClassName('lesson');
+    let totalMinutes = 0;
+    for (let i = 0; i < lessonDivs.length; i++) {
+        const lessonTime = parseInt(lessonDivs[i].querySelector('.time-input input').value.replace(' minutes', ''));
+        if (!isNaN(lessonTime)) {
+            totalMinutes += lessonTime;
         }
-        console.log(`Total module time: ${totalMinutes}`); // Log total module time
-        return totalMinutes;
     }
+    return totalMinutes;
+}
 
-    function updateModuleTime(moduleDiv) {
-        const moduleTimeSpan = moduleDiv.querySelector('.module-time');
-        const totalMinutes = calculateModuleTime(moduleDiv);
-        moduleTimeSpan.innerText = totalMinutes + ' minutes';
-        updateTotalCourseTime();
-    }
+function updateModuleTime(moduleDiv) {
+    const moduleTimeSpan = moduleDiv.querySelector('.module-time');
+    const totalMinutes = calculateModuleTime(moduleDiv);
+    moduleTimeSpan.innerText = totalMinutes + ' minutes';
+    updateTotalCourseTime();
+}
 
-    function updateTotalCourseTime() {
-        const modulesDiv = document.getElementById('modules').children;
-        let totalCourseMinutes = 0;
-        for (let i = 0; i < modulesDiv.length; i++) {
-            const moduleTime = parseInt(modulesDiv[i].querySelector('.module-time').innerText);
-            if (!isNaN(moduleTime)) {
-                totalCourseMinutes += moduleTime;
-            }
+function updateTotalCourseTime() {
+    const modulesDiv = document.getElementById('modules').children;
+    let totalCourseMinutes = 0;
+    for (let i = 0; i < modulesDiv.length; i++) {
+        const moduleTimeSpan = modulesDiv[i].querySelector('.module-time');
+        const moduleTime = parseInt(moduleTimeSpan.innerText.replace(' minutes', ''));
+        if (!isNaN(moduleTime)) {
+            totalCourseMinutes += moduleTime;
         }
-        console.log(`Total course time: ${totalCourseMinutes} minutes`); // Log total course time
-        document.getElementById('totalCourseTime').innerText = `Total Course Time: ${totalCourseMinutes} minutes`;
     }
+    document.getElementById('totalCourseTime').innerText = `Total Course Time: ${totalCourseMinutes} minutes`;
+}
 
-    function populateForm(data) {
-        try {
-            document.getElementById('courseTitle').value = data.courseTitle || '';
-            document.getElementById('courseDescription').value = data.courseDescription || '';
+function populateForm(data) {
+    try {
+        document.getElementById('courseTitle').value = data.courseTitle || '';
+        document.getElementById('courseDescription').value = data.courseDescription || '';
 
-            const modulesDiv = document.getElementById('modules');
-            modulesDiv.innerHTML = '';
+        const modulesDiv = document.getElementById('modules');
+        modulesDiv.innerHTML = '';
 
-            data.modules.forEach((module, moduleIndex) => {
-                const moduleDiv = document.createElement('div');
-                moduleDiv.className = 'module';
-                moduleDiv.dataset.moduleIndex = moduleIndex + 1;
+        data.modules.forEach((module, moduleIndex) => {
+            const moduleDiv = document.createElement('div');
+            moduleDiv.className = 'module';
+            moduleDiv.dataset.moduleIndex = moduleIndex + 1;
 
-                const moduleHeader = document.createElement('span');
-                moduleHeader.className = 'module-header';
-                moduleHeader.innerText = `Module ${moduleIndex + 1}:`;
+            const moduleHeader = document.createElement('span');
+            moduleHeader.className = 'module-header';
+            moduleHeader.innerText = `Module ${moduleIndex + 1}:`;
 
-                const moduleContent = document.createElement('input');
-                moduleContent.type = 'text';
-                moduleContent.className = 'module-content';
-                moduleContent.value = module.name.replace(`Module ${moduleIndex + 1}:`, '').trim(); // Remove "Module x:" from the name
+            const moduleContent = document.createElement('input');
+            moduleContent.type = 'text';
+            moduleContent.className = 'module-content';
+            moduleContent.value = module.name.replace(`Module ${moduleIndex + 1}:`, '').trim();
 
-                const moduleTime = document.createElement('span');
-                moduleTime.className = 'module-time';
-                moduleTime.innerText = '0 minutes';
+            const moduleTime = document.createElement('span');
+            moduleTime.className = 'module-time';
+            moduleTime.innerText = '0 minutes';
 
-                const deleteModuleBtn = document.createElement('button');
-                deleteModuleBtn.type = 'button';
-                deleteModuleBtn.className = 'delete-button';
-                deleteModuleBtn.innerText = 'Delete Module';
-                deleteModuleBtn.onclick = () => {
-                    moduleDiv.remove();
-                    updateTotalCourseTime();
+            const deleteModuleBtn = document.createElement('button');
+            deleteModuleBtn.type = 'button';
+            deleteModuleBtn.className = 'delete-button';
+            deleteModuleBtn.innerText = 'Delete Module';
+            deleteModuleBtn.onclick = () => {
+                moduleDiv.remove();
+                updateTotalCourseTime();
+            };
+
+            moduleDiv.appendChild(moduleHeader);
+            moduleDiv.appendChild(moduleContent);
+            moduleDiv.appendChild(moduleTime);
+            moduleDiv.appendChild(deleteModuleBtn);
+
+            module.lessons.forEach((lesson, lessonIndex) => {
+                const lessonDiv = document.createElement('div');
+                lessonDiv.className = 'lesson';
+
+                const lessonHeader = document.createElement('span');
+                lessonHeader.className = 'lesson-header';
+                lessonHeader.innerText = `Lesson ${moduleIndex + 1}.${lessonIndex + 1}:`;
+
+                const lessonContent = document.createElement('input');
+                lessonContent.type = 'text';
+                lessonContent.className = 'lesson-content';
+                lessonContent.value = lesson.name.replace(`Lesson ${moduleIndex + 1}.${lessonIndex + 1}:`, '').trim();
+
+                const lessonTimeInput = document.createElement('input');
+                lessonTimeInput.type = 'number';
+                lessonTimeInput.className = 'time-input';
+                lessonTimeInput.value = lesson.time.replace(' minutes', '').trim();
+
+                const confirmButton = document.createElement('button');
+                confirmButton.type = 'button';
+                confirmButton.className = 'confirm-button';
+                confirmButton.innerText = 'Confirm';
+                confirmButton.onclick = () => updateModuleTime(moduleDiv);
+
+                const deleteLessonBtn = document.createElement('button');
+                deleteLessonBtn.type = 'button';
+                deleteLessonBtn.className = 'delete-button';
+                deleteLessonBtn.innerText = 'Delete Lesson';
+                deleteLessonBtn.onclick = () => {
+                    lessonDiv.remove();
+                    updateModuleTime(moduleDiv);
                 };
 
-                moduleDiv.appendChild(moduleHeader);
-                moduleDiv.appendChild(moduleContent);
-                moduleDiv.appendChild(moduleTime);
-                moduleDiv.appendChild(deleteModuleBtn);
+                lessonDiv.appendChild(lessonHeader);
+                lessonDiv.appendChild(lessonContent);
+                lessonDiv.appendChild(lessonTimeInput);
+                lessonDiv.appendChild(confirmButton);
+                lessonDiv.appendChild(deleteLessonBtn);
 
-                module.lessons.forEach((lesson, lessonIndex) => {
-                    const lessonDiv = document.createElement('div');
-                    lessonDiv.className = 'lesson';
-
-                    const lessonHeader = document.createElement('span');
-                    lessonHeader.className = 'lesson-header';
-                    lessonHeader.innerText = `Lesson ${moduleIndex + 1}.${lessonIndex + 1}:`;
-
-                    const lessonContent = document.createElement('input');
-                    lessonContent.type = 'text';
-                    lessonContent.className = 'lesson-content';
-                    lessonContent.value = lesson.name.replace(`Lesson ${moduleIndex + 1}.${lessonIndex + 1}:`, '').trim(); // Remove "Lesson x.y:" from the name
-
-                    const lessonTimeInput = document.createElement('input');
-                    lessonTimeInput.type = 'number';
-                    lessonTimeInput.className = 'time-input';
-                    lessonTimeInput.value = lesson.time.replace(' minutes', '').trim();
-
-                    const confirmButton = document.createElement('button');
-                    confirmButton.type = 'button';
-                    confirmButton.className = 'confirm-button';
-                    confirmButton.innerText = 'Confirm';
-                    confirmButton.onclick = () => updateModuleTime(moduleDiv);
-
-                    const deleteLessonBtn = document.createElement('button');
-                    deleteLessonBtn.type = 'button';
-                    deleteLessonBtn.className = 'delete-button';
-                    deleteLessonBtn.innerText = 'Delete Lesson';
-                    deleteLessonBtn.onclick = () => {
-                        lessonDiv.remove();
-                        updateModuleTime(moduleDiv);
-                    };
-
-                    lessonDiv.appendChild(lessonHeader);
-                    lessonDiv.appendChild(lessonContent);
-                    lessonDiv.appendChild(lessonTimeInput);
-                    lessonDiv.appendChild(confirmButton);
-                    lessonDiv.appendChild(deleteLessonBtn);
-
-                    moduleDiv.appendChild(lessonDiv);
-                });
-
-                modulesDiv.appendChild(moduleDiv);
-                updateModuleTime(moduleDiv); // Calculate and update module time initially
+                moduleDiv.appendChild(lessonDiv);
             });
 
-            updateTotalCourseTime(); // Update total course time initially
-        } catch (error) {
-            console.error('Error populating form:', error);
-        }
-    }
+            modulesDiv.appendChild(moduleDiv);
+            updateModuleTime(moduleDiv);
+        });
 
-    const params = getQueryParams();
-    if (params.data) {
-        try {
-            const data = JSON.parse(decodeURIComponent(params.data));
-            console.log("Parsed Data: ", data); // Log the parsed data for debugging
-            populateForm(data);
-        } catch (e) {
-            console.error('Error parsing JSON data:', e);
-        }
-    } else {
-        console.error('No data parameter found in URL');
+        updateTotalCourseTime();
+    } catch (error) {
+        console.error('Error populating form:', error);
     }
+}
+
+const params = getQueryParams();
+if (params.data) {
+    try {
+        const data = JSON.parse(decodeURIComponent(params.data));
+        populateForm(data);
+    } catch (e) {
+        console.error('Error parsing JSON data:', e);
+    }
+} else {
+    console.error('No data parameter found in URL');
+}
+
 
     document.getElementById('courseForm').onsubmit = function(event) {
         event.preventDefault();
