@@ -3,11 +3,70 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Course Data</title>
+    <title>Edit Course Structure</title>
     <link rel="stylesheet" href="styles.css"> <!-- Link to your main CSS -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f9f9f9;
+        }
+        h1 {
+            color: #333;
+        }
+        .instruction {
+            margin-bottom: 20px;
+            font-style: italic;
+            color: #555;
+        }
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px;
+            font-weight: bold;
+        }
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .module, .lesson {
+            margin-bottom: 15px;
+        }
+        .module > label {
+            font-size: 18px;
+            font-weight: bold;
+            color: #007bff;
+            margin-bottom: 10px;
+        }
+        .lesson > input[type="text"] {
+            width: calc(100% - 20px);
+            padding: 6px;
+            margin-left: 20px;
+        }
+        input[type="submit"] {
+            background-color: #28a745;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #218838;
+        }
+    </style>
 </head>
 <body>
 <h1>Edit Course Details</h1>
+<p class="instruction">Please review and modify the modules and times as necessary.</p>
 <form id="courseForm">
     <label for="courseTitle">Course Title:</label>
     <input type="text" id="courseTitle" name="courseTitle">
@@ -45,9 +104,16 @@
         const moduleDiv = document.createElement('div');
         moduleDiv.className = 'module';
 
-        const moduleLabel = document.createElement('label');
-        moduleLabel.innerText = `${module.name} (${module.time})`;
-        moduleDiv.appendChild(moduleLabel);
+        const moduleNameInput = document.createElement('input');
+        moduleNameInput.type = 'text';
+        moduleNameInput.value = module.name;
+        moduleDiv.appendChild(moduleNameInput);
+
+        const moduleTimeInput = document.createElement('input');
+        moduleTimeInput.type = 'text';
+        moduleTimeInput.value = module.time;
+        moduleTimeInput.style = 'margin-left: 10px;';
+        moduleDiv.appendChild(moduleTimeInput);
 
         module.lessons.forEach((lesson, lessonIndex) => {
           const lessonDiv = document.createElement('div');
@@ -55,9 +121,14 @@
 
           const lessonInput = document.createElement('input');
           lessonInput.type = 'text';
-          lessonInput.name = `module${moduleIndex + 1}_lesson${lessonIndex + 1}`;
-          lessonInput.value = `${lesson.name} (${lesson.time})`;
+          lessonInput.value = `${lesson.name}`;
           lessonDiv.appendChild(lessonInput);
+
+          const lessonTimeInput = document.createElement('input');
+          lessonTimeInput.type = 'text';
+          lessonTimeInput.value = `${lesson.time}`;
+          lessonTimeInput.style = 'margin-left: 10px;';
+          lessonDiv.appendChild(lessonTimeInput);
 
           moduleDiv.appendChild(lessonDiv);
         });
@@ -90,18 +161,17 @@
       for (let i = 0; i < modulesDiv.length; i++) {
         const moduleDiv = modulesDiv[i];
         const moduleData = {
-          name: moduleDiv.querySelector('label').innerText.split(' (')[0],
-          time: moduleDiv.querySelector('label').innerText.split(' (')[1].replace(')', '').trim(),
+          name: moduleDiv.querySelector('input[type="text"]').value,
+          time: moduleDiv.querySelectorAll('input[type="text"]')[1].value,
           lessons: []
         };
 
         const lessonsDiv = moduleDiv.getElementsByClassName('lesson');
         for (let j = 0; j < lessonsDiv.length; j++) {
-          const lessonInput = lessonsDiv[j].querySelector('input');
-          const [lessonName, lessonTime] = lessonInput.value.split(' (');
+          const lessonInputs = lessonsDiv[j].getElementsByTagName('input');
           moduleData.lessons.push({
-            name: lessonName.trim(),
-            time: lessonTime.replace(')', '').trim()
+            name: lessonInputs[0].value.trim(),
+            time: lessonInputs[1].value.trim()
           });
         }
 
