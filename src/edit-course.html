@@ -76,6 +76,18 @@
             padding: 6px;
             box-sizing: border-box;
         }
+        .confirm-button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        .confirm-button:hover {
+            background-color: #0056b3;
+        }
         .delete-button {
             margin-left: 10px;
             background-color: #dc3545;
@@ -87,18 +99,6 @@
         }
         .delete-button:hover {
             background-color: #c82333;
-        }
-        .calc-button {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 4px;
-            cursor: pointer;
-            margin-top: 10px;
-        }
-        .calc-button:hover {
-            background-color: #0056b3;
         }
         input[type="submit"] {
             background-color: #28a745;
@@ -130,7 +130,6 @@
             <!-- Modules and Lessons will be dynamically generated here -->
         </div>
 
-        <button type="button" class="calc-button" onclick="recalculateTimes()">Recalculate Module Times</button>
         <input type="submit" value="Save Changes">
     </form>
 </div>
@@ -145,29 +144,21 @@
         return params;
     }
 
-    function calculateModuleTime(lessons) {
+    function calculateModuleTime(moduleDiv) {
+        const lessonDivs = moduleDiv.getElementsByClassName('lesson');
         let totalMinutes = 0;
-        lessons.forEach(lesson => {
-            const minutes = parseInt(lesson.time);
-            if (!isNaN(minutes)) {
-                totalMinutes += minutes;
+        for (let i = 0; i < lessonDivs.length; i++) {
+            const lessonTime = parseInt(lessonDivs[i].querySelector('.time-input input').value);
+            if (!isNaN(lessonTime)) {
+                totalMinutes += lessonTime;
             }
-        });
+        }
         return totalMinutes + ' minutes';
     }
 
-    function recalculateTimes() {
-        const modulesDiv = document.getElementById('modules').children;
-        for (let i = 0; i < modulesDiv.length; i++) {
-            const moduleDiv = modulesDiv[i];
-            const moduleTimeSpan = moduleDiv.querySelector('.time-input span');
-            const lessons = Array.from(moduleDiv.getElementsByClassName('lesson'));
-            const lessonTimes = lessons.map(lessonDiv => {
-                const timeInput = lessonDiv.querySelector('.time-input input');
-                return { time: timeInput.value.trim() };
-            });
-            moduleTimeSpan.innerText = calculateModuleTime(lessonTimes);
-        }
+    function updateModuleTime(moduleDiv) {
+        const moduleTimeSpan = moduleDiv.querySelector('.time-input');
+        moduleTimeSpan.innerText = calculateModuleTime(moduleDiv);
     }
 
     function updateLessonNumbers(moduleDiv) {
@@ -201,7 +192,7 @@
 
             const moduleTime = document.createElement('span');
             moduleTime.className = 'time-input';
-            moduleTime.innerText = calculateModuleTime(module.lessons);
+            moduleTime.innerText = calculateModuleTime(moduleDiv);
 
             const deleteModuleBtn = document.createElement('button');
             deleteModuleBtn.type = 'button';
@@ -232,6 +223,12 @@
                 lessonTimeInput.className = 'time-input';
                 lessonTimeInput.value = lesson.time;
 
+                const confirmButton = document.createElement('button');
+                confirmButton.type = 'button';
+                confirmButton.className = 'confirm-button';
+                confirmButton.innerText = 'Confirm';
+                confirmButton.onclick = () => updateModuleTime(moduleDiv);
+
                 const deleteLessonBtn = document.createElement('button');
                 deleteLessonBtn.type = 'button';
                 deleteLessonBtn.className = 'delete-button';
@@ -239,18 +236,20 @@
                 deleteLessonBtn.onclick = () => {
                     lessonDiv.remove();
                     updateLessonNumbers(moduleDiv);
-                    moduleTime.innerText = calculateModuleTime(Array.from(moduleDiv.getElementsByClassName('lesson')));
+                    updateModuleTime(moduleDiv);
                 };
 
                 lessonDiv.appendChild(lessonHeader);
                 lessonDiv.appendChild(lessonContent);
                 lessonDiv.appendChild(lessonTimeInput);
+                lessonDiv.appendChild(confirmButton);
                 lessonDiv.appendChild(deleteLessonBtn);
 
                 moduleDiv.appendChild(lessonDiv);
             });
 
             modulesDiv.appendChild(moduleDiv);
+            moduleTime.innerText = calculateModuleTime(moduleDiv); // Calculate module time initially
         });
     }
 
@@ -265,6 +264,8 @@
     }
 
     document.getElementById('courseForm').onsubmit = function(event) {
+        event.preventDefault();
+        const courseData = {
         event.preventDefault();
         const courseData = {
             courseTitle: document.getElementById('courseTitle').value,
