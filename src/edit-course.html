@@ -170,87 +170,91 @@
     }
 
     function populateForm(data) {
-        document.getElementById('courseTitle').value = data.courseTitle || '';
-        document.getElementById('courseDescription').value = data.courseDescription || '';
+        try {
+            document.getElementById('courseTitle').value = data.courseTitle || '';
+            document.getElementById('courseDescription').value = data.courseDescription || '';
 
-        const modulesDiv = document.getElementById('modules');
-        modulesDiv.innerHTML = '';
+            const modulesDiv = document.getElementById('modules');
+            modulesDiv.innerHTML = '';
 
-        data.modules.forEach((module, moduleIndex) => {
-            const moduleDiv = document.createElement('div');
-            moduleDiv.className = 'module';
-            moduleDiv.dataset.moduleIndex = moduleIndex + 1;
+            data.modules.forEach((module, moduleIndex) => {
+                const moduleDiv = document.createElement('div');
+                moduleDiv.className = 'module';
+                moduleDiv.dataset.moduleIndex = moduleIndex + 1;
 
-            const moduleHeader = document.createElement('span');
-            moduleHeader.className = 'module-header';
-            moduleHeader.innerText = `Module ${moduleIndex + 1}:`;
+                const moduleHeader = document.createElement('span');
+                moduleHeader.className = 'module-header';
+                moduleHeader.innerText = `Module ${moduleIndex + 1}:`;
 
-            const moduleContent = document.createElement('input');
-            moduleContent.type = 'text';
-            moduleContent.className = 'module-content';
-            moduleContent.value = module.name;
+                const moduleContent = document.createElement('input');
+                moduleContent.type = 'text';
+                moduleContent.className = 'module-content';
+                moduleContent.value = module.name.replace(`Module ${moduleIndex + 1}:`, '').trim(); // Remove "Module x:" from the name
 
-            const moduleTime = document.createElement('span');
-            moduleTime.className = 'time-input';
-            moduleTime.innerText = calculateModuleTime(moduleDiv);
+                const moduleTime = document.createElement('span');
+                moduleTime.className = 'time-input';
+                moduleTime.innerText = calculateModuleTime(moduleDiv);
 
-            const deleteModuleBtn = document.createElement('button');
-            deleteModuleBtn.type = 'button';
-            deleteModuleBtn.className = 'delete-button';
-            deleteModuleBtn.innerText = 'Delete Module';
-            deleteModuleBtn.onclick = () => moduleDiv.remove();
+                const deleteModuleBtn = document.createElement('button');
+                deleteModuleBtn.type = 'button';
+                deleteModuleBtn.className = 'delete-button';
+                deleteModuleBtn.innerText = 'Delete Module';
+                deleteModuleBtn.onclick = () => moduleDiv.remove();
 
-            moduleDiv.appendChild(moduleHeader);
-            moduleDiv.appendChild(moduleContent);
-            moduleDiv.appendChild(moduleTime);
-            moduleDiv.appendChild(deleteModuleBtn);
+                moduleDiv.appendChild(moduleHeader);
+                moduleDiv.appendChild(moduleContent);
+                moduleDiv.appendChild(moduleTime);
+                moduleDiv.appendChild(deleteModuleBtn);
 
-            module.lessons.forEach((lesson, lessonIndex) => {
-                const lessonDiv = document.createElement('div');
-                lessonDiv.className = 'lesson';
+                module.lessons.forEach((lesson, lessonIndex) => {
+                    const lessonDiv = document.createElement('div');
+                    lessonDiv.className = 'lesson';
 
-                const lessonHeader = document.createElement('span');
-                lessonHeader.className = 'lesson-header';
-                lessonHeader.innerText = `Lesson ${moduleIndex + 1}.${lessonIndex + 1}:`;
+                    const lessonHeader = document.createElement('span');
+                    lessonHeader.className = 'lesson-header';
+                    lessonHeader.innerText = `Lesson ${moduleIndex + 1}.${lessonIndex + 1}:`;
 
-                const lessonContent = document.createElement('input');
-                lessonContent.type = 'text';
-                lessonContent.className = 'lesson-content';
-                lessonContent.value = lesson.name;
+                    const lessonContent = document.createElement('input');
+                    lessonContent.type = 'text';
+                    lessonContent.className = 'lesson-content';
+                    lessonContent.value = lesson.name.replace(`Lesson ${moduleIndex + 1}.${lessonIndex + 1}:`, '').trim(); // Remove "Lesson x.y:" from the name
 
-                const lessonTimeInput = document.createElement('input');
-                lessonTimeInput.type = 'number';
-                lessonTimeInput.className = 'time-input';
-                lessonTimeInput.value = lesson.time;
+                    const lessonTimeInput = document.createElement('input');
+                    lessonTimeInput.type = 'number';
+                    lessonTimeInput.className = 'time-input';
+                    lessonTimeInput.value = lesson.time.replace(' minutes', '').trim();
 
-                const confirmButton = document.createElement('button');
-                confirmButton.type = 'button';
-                confirmButton.className = 'confirm-button';
-                confirmButton.innerText = 'Confirm';
-                confirmButton.onclick = () => updateModuleTime(moduleDiv);
+                    const confirmButton = document.createElement('button');
+                    confirmButton.type = 'button';
+                    confirmButton.className = 'confirm-button';
+                    confirmButton.innerText = 'Confirm';
+                    confirmButton.onclick = () => updateModuleTime(moduleDiv);
 
-                const deleteLessonBtn = document.createElement('button');
-                deleteLessonBtn.type = 'button';
-                deleteLessonBtn.className = 'delete-button';
-                deleteLessonBtn.innerText = 'Delete Lesson';
-                deleteLessonBtn.onclick = () => {
-                    lessonDiv.remove();
-                    updateLessonNumbers(moduleDiv);
-                    updateModuleTime(moduleDiv);
-                };
+                    const deleteLessonBtn = document.createElement('button');
+                    deleteLessonBtn.type = 'button';
+                    deleteLessonBtn.className = 'delete-button';
+                    deleteLessonBtn.innerText = 'Delete Lesson';
+                    deleteLessonBtn.onclick = () => {
+                        lessonDiv.remove();
+                        updateLessonNumbers(moduleDiv);
+                        updateModuleTime(moduleDiv);
+                    };
 
-                lessonDiv.appendChild(lessonHeader);
-                lessonDiv.appendChild(lessonContent);
-                lessonDiv.appendChild(lessonTimeInput);
-                lessonDiv.appendChild(confirmButton);
-                lessonDiv.appendChild(deleteLessonBtn);
+                    lessonDiv.appendChild(lessonHeader);
+                    lessonDiv.appendChild(lessonContent);
+                    lessonDiv.appendChild(lessonTimeInput);
+                    lessonDiv.appendChild(confirmButton);
+                    lessonDiv.appendChild(deleteLessonBtn);
 
-                moduleDiv.appendChild(lessonDiv);
+                    moduleDiv.appendChild(lessonDiv);
+                });
+
+                modulesDiv.appendChild(moduleDiv);
+                moduleTime.innerText = calculateModuleTime(moduleDiv); // Calculate module time initially
             });
-
-            modulesDiv.appendChild(moduleDiv);
-            moduleTime.innerText = calculateModuleTime(moduleDiv); // Calculate module time initially
-        });
+        } catch (error) {
+            console.error('Error populating form:', error);
+        }
     }
 
     const params = getQueryParams();
@@ -261,12 +265,12 @@
         } catch (e) {
             console.error('Error parsing JSON data:', e);
         }
+    } else {
+        console.error('No data parameter found in URL');
     }
 
     document.getElementById('courseForm').onsubmit = function(event) {
         event.preventDefault();
-        const courseData = {
-            event.preventDefault();
         const courseData = {
             courseTitle: document.getElementById('courseTitle').value,
             courseDescription: document.getElementById('courseDescription').value,
