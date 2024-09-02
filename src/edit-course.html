@@ -213,7 +213,7 @@
 
                 const moduleTime = document.createElement('span');
                 moduleTime.className = 'module-time';
-                moduleTime.innerText = calculateModuleTime(moduleDiv) + ' minutes';
+                moduleTime.innerText = 'Calculating...';
 
                 const deleteModuleBtn = document.createElement('button');
                 deleteModuleBtn.type = 'button';
@@ -284,6 +284,7 @@
     if (params.data) {
         try {
             const data = JSON.parse(decodeURIComponent(params.data));
+            console.log("Parsed Data: ", data); // For debugging purposes
             populateForm(data);
         } catch (e) {
             console.error('Error parsing JSON data:', e);
