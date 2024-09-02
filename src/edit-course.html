@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Course Data</title>
+    <title>Course Editor</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -121,7 +121,7 @@
 </head>
 <body>
 <div class="container">
-    <h1>Edit Course Details</h1>
+    <h1>Course Editor</h1>
     <p class="instruction">Please review and modify the modules and times as necessary.</p>
     <form id="courseForm">
         <label for="courseTitle">Course Title:</label>
@@ -213,7 +213,7 @@
 
                 const moduleTime = document.createElement('span');
                 moduleTime.className = 'module-time';
-                moduleTime.innerText = 'Calculating...';
+                moduleTime.innerText = '0 minutes';
 
                 const deleteModuleBtn = document.createElement('button');
                 deleteModuleBtn.type = 'button';
