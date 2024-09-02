@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thank You</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 100vh;
+          background-color: #f4f4f4;
+          font-family: Arial, sans-serif;
+        }
+        .thank-you-container {
+          text-align: center;
+          padding: 30px;
+          background-color: #ffffff;
+          box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .thank-you-container h1 {
+          color: #333333;
+        }
+        .thank-you-container p {
+          color: #555555;
+          margin-top: 20px;
+          margin-bottom: 30px;
+        }
+        .loading-spinner {
+          border: 4px solid #f3f3f3;
+          border-radius: 50%;
+          border-top: 4px solid #3498db;
+          width: 40px;
+          height: 40px;
+          animation: spin 2s linear infinite;
+          margin: 0 auto;
+        }
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+<div class="thank-you-container">
+    <h1>Thank You!</h1>
+    <p>Your request is being processed. This may take a few moments.</p>
+    <div class="loading-spinner"></div>
+    <p>Please do not close this page. Your content will be ready soon.</p>
+</div>
+
+<script>
+    function redirectToEditPage(url) {
+    window.location.href = url;
+  }
+
+  // Example: Simulating a webhook or event from Make.com
+  setTimeout(() => {
+    const generatedUrl = 'https://makeonlinecourse.com/edit-course'; // Replace with the actual URL from Make.com
+    redirectToEditPage(generatedUrl);
+  }, 5000); // Simulate delay for receiving the URL (5 seconds)
+</script>
+</body>
+</html>

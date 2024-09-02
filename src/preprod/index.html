@@ -17,7 +17,7 @@
 <main class="main-content">
   <div class="container">
     <section class="form-section">
-      <form id="courseForm" action="https://docs.google.com/forms/d/e/1FAIpQLSemaclvFT6-CT6lCv_a9cffxnVPWWH_3SyubKoJUx2iuUDjzQ/formResponse" method="POST" target="_self">
+      <form id="courseForm" action="https://docs.google.com/forms/d/e/1FAIpQLSemaclvFT6-CT6lCv_a9cffxnVPWWH_3SyubKoJUx2iuUDjzQ/formResponse" method="POST" target="_self" onsubmit="redirectAfterSubmit(event)">
         <div class="form-group">
           <label for="courseTitle">Course Title</label>
           <input type="text" id="courseTitle" name="entry.87097577" required>
@@ -67,5 +67,24 @@
     <p>&copy; 2024 Amit Marmari</p>
   </div>
 </footer>
+
+<script>
+  function redirectAfterSubmit(event) {
+    event.preventDefault(); // Prevent the form from submitting the default way
+    const form = document.getElementById('courseForm');
+
+    // Create an iframe to submit the form without leaving the page
+    const iframe = document.createElement('iframe');
+    iframe.style.display = 'none';
+    document.body.appendChild(iframe);
+
+    form.target = iframe.name;
+    form.submit(); // Submit the form to Google Forms
+
+    // Redirect to the desired page
+    window.location.href = 'https://makeonlinecourse.com/thank-you.html'; // Replace with your actual redirect URL
+  }
+</script>
+
 </body>
 </html>
