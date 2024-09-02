@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Course Data</title>
-    <link rel="stylesheet" href="styles.css"> <!-- Link to your main CSS -->
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -113,6 +112,11 @@
         input[type="submit"]:hover {
             background-color: #218838;
         }
+        #totalCourseTime {
+            font-weight: bold;
+            margin-top: 20px;
+            font-size: 18px;
+        }
     </style>
 </head>
 <body>
@@ -129,6 +133,8 @@
         <div id="modules">
             <!-- Modules and Lessons will be dynamically generated here -->
         </div>
+
+        <div id="totalCourseTime">Total Course Time: 0 minutes</div>
 
         <input type="submit" value="Save Changes">
     </form>
@@ -157,9 +163,22 @@
     }
 
     function updateModuleTime(moduleDiv) {
-        const moduleTimeSpan = moduleDiv.querySelector('.time-input');
+        const moduleTimeSpan = moduleDiv.querySelector('.module-time');
         const totalMinutes = calculateModuleTime(moduleDiv);
         moduleTimeSpan.innerText = totalMinutes + ' minutes';
+        updateTotalCourseTime();
+    }
+
+    function updateTotalCourseTime() {
+        const modulesDiv = document.getElementById('modules').children;
+        let totalCourseMinutes = 0;
+        for (let i = 0; i < modulesDiv.length; i++) {
+            const moduleTime = parseInt(modulesDiv[i].querySelector('.module-time').innerText);
+            if (!isNaN(moduleTime)) {
+                totalCourseMinutes += moduleTime;
+            }
+        }
+        document.getElementById('totalCourseTime').innerText = `Total Course Time: ${totalCourseMinutes} minutes`;
     }
 
     function updateLessonNumbers(moduleDiv) {
@@ -193,14 +212,17 @@
                 moduleContent.value = module.name.replace(`Module ${moduleIndex + 1}:`, '').trim(); // Remove "Module x:" from the name
 
                 const moduleTime = document.createElement('span');
-                moduleTime.className = 'time-input';
+                moduleTime.className = 'module-time';
                 moduleTime.innerText = calculateModuleTime(moduleDiv) + ' minutes';
 
                 const deleteModuleBtn = document.createElement('button');
                 deleteModuleBtn.type = 'button';
                 deleteModuleBtn.className = 'delete-button';
                 deleteModuleBtn.innerText = 'Delete Module';
-                deleteModuleBtn.onclick = () => moduleDiv.remove();
+                deleteModuleBtn.onclick = () => {
+                    moduleDiv.remove();
+                    updateTotalCourseTime();
+                };
 
                 moduleDiv.appendChild(moduleHeader);
                 moduleDiv.appendChild(moduleContent);
@@ -283,7 +305,7 @@
             const moduleDiv = modulesDiv[i];
             const moduleData = {
                 name: moduleDiv.querySelector('.module-content').value,
-                time: moduleDiv.querySelector('.time-input').innerText,
+                time: moduleDiv.querySelector('.module-time').innerText,
                 lessons: []
             };
 
@@ -303,6 +325,5 @@
         // You can send this updated data back to your server or store it locally
     };
 </script>
-
 </body>
 </html>
