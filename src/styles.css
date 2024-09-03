@@ -45,10 +45,39 @@ body {
     border-radius: 8px;
 }
 
+/* Features Section */
+.features {
+    background-color: #f9f9f9;
+    padding: 40px 20px;
+    text-align: center;
+}
+
+.features-container {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+}
+
+.feature-item {
+    flex: 1;
+    padding: 20px;
+    text-align: center;
+}
+
+.feature-item i {
+    font-size: 3em;
+    color: #007BFF;
+    margin-bottom: 10px;
+}
+
+.feature-item h3 {
+    font-size: 1.5em;
+}
+
 /* Form Section */
 .form-section {
     max-width: 600px;
-    margin: 0 auto;
+    margin: 40px auto 0;
 }
 
 .form-group {
@@ -102,4 +131,20 @@ body {
 .footer p {
     margin: 0;
     font-size: 1em;
+}
+
+/* Social Media Links Styling */
+.footer .social-links {
+    margin-top: 20px;
+}
+
+.footer .social-links a {
+    color: #fff;
+    margin: 0 10px;
+    text-decoration: none;
+    font-size: 1.2em;
+}
+
+.footer .social-links a:hover {
+    color: #ddd;
 }
