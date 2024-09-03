@@ -83,14 +83,36 @@
     function redirectAfterSubmit(event) {
       event.preventDefault(); // Prevent the default form submission
 
-      // Submit the form to Google Forms
+      // Submit the form via an XMLHttpRequest to avoid redirection by Google Forms
       const form = document.getElementById('courseForm');
-      form.submit();
+      const formData = new FormData(form);
 
-      // Redirect to the thank-you page after a short delay
-      setTimeout(function() {
-        window.location.href = 'https://makeonlinecourse.com/thank-you.html';
-      }, 1000); // Delay to allow form submission to complete
+      // Create an XMLHttpRequest to submit the form
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', form.action, true);
+      xhr.setRequestHeader('Accept', 'application/x-www-form-urlencoded');
+
+      // Set up a handler to redirect once the submission is complete
+      xhr.onload = function () {
+        if (xhr.status >= 200 && xhr.status < 400) {
+          // Redirect to the thank-you page
+          window.location.href = 'https://makeonlinecourse.com/thank-you.html';
+        } else {
+          // Handle error
+          console.error('Form submission failed.');
+        }
+      };
+
+      xhr.onerror = function () {
+        // Handle error
+        console.error('Form submission failed.');
+      };
+
+      // Convert formData to a URL-encoded string
+      const urlEncodedData = new URLSearchParams(formData).toString();
+
+      // Send the request with the form data
+      xhr.send(urlEncodedData);
     }
 </script>
 
