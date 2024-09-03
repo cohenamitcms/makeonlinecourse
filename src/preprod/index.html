@@ -84,12 +84,18 @@
       event.preventDefault(); // Prevent the default form submission
 
       const form = document.getElementById('courseForm');
+      const submitButton = document.querySelector('.submit-button');
+
+      // Disable the submit button and change its text to "Processing..."
+      submitButton.disabled = true;
+      submitButton.innerHTML = 'Processing...';
+
       const formData = new FormData(form);
 
-      // Convert FormData to URL-encoded string
+      // Convert FormData to a URL-encoded string
       const urlEncodedData = new URLSearchParams(formData).toString();
 
-      // Use fetch API to submit the form
+      // Use fetch API to submit the form via AJAX
       fetch(form.action, {
         method: 'POST',
         headers: {
@@ -97,21 +103,15 @@
         },
         body: urlEncodedData,
       })
-      .then(response => {
-        // Check if the response is okay
-        if (response.ok) {
-          // Redirect to the thank-you page
+      .finally(() => {
+        // Redirect to the thank-you page after a short delay
+        setTimeout(function() {
           window.location.href = 'https://makeonlinecourse.com/thank-you.html';
-        } else {
-          // Log an error if the submission failed
-          console.error('Form submission failed with status:', response.status);
-        }
-      })
-      .catch(error => {
-        console.error('Form submission error:', error);
+        }, 1000); // 1-second delay to allow form submission to complete
       });
     }
 </script>
+
 
 
 </body>
