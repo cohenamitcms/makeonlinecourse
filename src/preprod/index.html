@@ -83,38 +83,36 @@
     function redirectAfterSubmit(event) {
       event.preventDefault(); // Prevent the default form submission
 
-      // Get the form element
       const form = document.getElementById('courseForm');
-
-      // Create an XMLHttpRequest to submit the form
-      const xhr = new XMLHttpRequest();
-      xhr.open('POST', form.action, true);
-      xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-
-      // Serialize the form data
       const formData = new FormData(form);
+
+      // Convert FormData to URL-encoded string
       const urlEncodedData = new URLSearchParams(formData).toString();
 
-      // Set up a handler to redirect once the submission is complete
-      xhr.onload = function () {
-        if (xhr.status >= 200 && xhr.status < 400) {
+      // Use fetch API to submit the form
+      fetch(form.action, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: urlEncodedData,
+      })
+      .then(response => {
+        // Check if the response is okay
+        if (response.ok) {
           // Redirect to the thank-you page
           window.location.href = 'https://makeonlinecourse.com/thank-you.html';
         } else {
-          // Handle error
-          console.error('Form submission failed.');
+          // Log an error if the submission failed
+          console.error('Form submission failed with status:', response.status);
         }
-      };
-
-      xhr.onerror = function () {
-        // Handle error
-        console.error('Form submission failed.');
-      };
-
-      // Send the request with the form data
-      xhr.send(urlEncodedData);
+      })
+      .catch(error => {
+        console.error('Form submission error:', error);
+      });
     }
 </script>
+
 
 </body>
 </html>
