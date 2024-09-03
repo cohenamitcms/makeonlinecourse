@@ -17,7 +17,7 @@
 <main class="main-content">
     <div class="container">
         <section class="form-section">
-            <form id="courseForm" action="https://docs.google.com/forms/d/e/1FAIpQLSemaclvFT6-CT6lCv_a9cffxnVPWWH_3SyubKoJUx2iuUDjzQ/formResponse" method="POST" target="_self" onsubmit="redirectAfterSubmit(event)">
+            <form id="courseForm" action="https://docs.google.com/forms/d/e/1FAIpQLSemaclvFT6-CT6lCv_a9cffxnVPWWH_3SyubKoJUx2iuUDjzQ/formResponse" method="POST" onsubmit="redirectAfterSubmit(event)">
                 <div class="form-group">
                     <label for="courseTitle">Course Title</label>
                     <input type="text" id="courseTitle" name="entry.87097577" required>
@@ -83,14 +83,17 @@
     function redirectAfterSubmit(event) {
       event.preventDefault(); // Prevent the default form submission
 
-      // Submit the form via an XMLHttpRequest to avoid redirection by Google Forms
+      // Get the form element
       const form = document.getElementById('courseForm');
-      const formData = new FormData(form);
 
       // Create an XMLHttpRequest to submit the form
       const xhr = new XMLHttpRequest();
       xhr.open('POST', form.action, true);
-      xhr.setRequestHeader('Accept', 'application/x-www-form-urlencoded');
+      xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+      // Serialize the form data
+      const formData = new FormData(form);
+      const urlEncodedData = new URLSearchParams(formData).toString();
 
       // Set up a handler to redirect once the submission is complete
       xhr.onload = function () {
@@ -107,9 +110,6 @@
         // Handle error
         console.error('Form submission failed.');
       };
-
-      // Convert formData to a URL-encoded string
-      const urlEncodedData = new URLSearchParams(formData).toString();
 
       // Send the request with the form data
       xhr.send(urlEncodedData);
