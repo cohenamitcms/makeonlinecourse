@@ -186,3 +186,70 @@ body {
 .footer .social-links a:hover {
     color: #ddd;
 }
+
+/* Responsive Design - Mobile First */
+
+/* Mobile styles (max-width: 768px) */
+@media (max-width: 768px) {
+    .features-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .feature-item {
+        margin-bottom: 20px;
+        width: 100%;
+    }
+
+    .header h1 {
+        font-size: 2em;
+    }
+
+    .header p {
+        font-size: 1em;
+    }
+
+    .features h2 {
+        font-size: 2em;
+    }
+
+    .feature-item h3 {
+        font-size: 1.3em;
+    }
+
+    .feature-item p {
+        font-size: 1.1em;
+    }
+
+    .form-section {
+        margin: 20px auto 0;
+    }
+}
+
+/* Extra small devices (max-width: 480px) */
+@media (max-width: 480px) {
+    .header h1 {
+        font-size: 1.8em;
+    }
+
+    .header p {
+        font-size: 0.9em;
+    }
+
+    .features h2 {
+        font-size: 1.8em;
+    }
+
+    .feature-item h3 {
+        font-size: 1.2em;
+    }
+
+    .feature-item p {
+        font-size: 1em;
+    }
+
+    .submit-button {
+        font-size: 0.9em;
+        padding: 8px 16px;
+    }
+}
