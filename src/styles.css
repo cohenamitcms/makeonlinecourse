@@ -48,7 +48,7 @@ body {
 /* Features Section */
 .features {
     background-color: #f9f9f9;
-    padding: 40px 20px;
+    padding: 60px 20px;
     text-align: center;
 }
 
@@ -62,16 +62,54 @@ body {
     flex: 1;
     padding: 20px;
     text-align: center;
+    background-color: #ffffff;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.feature-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
 }
 
 .feature-item i {
-    font-size: 3em;
+    font-size: 4em;
     color: #007BFF;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
+    transition: color 0.3s;
+}
+
+.feature-item:hover i {
+    color: #0056b3;
 }
 
 .feature-item h3 {
     font-size: 1.5em;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.feature-item p {
+    font-size: 1.2em;
+    color: #666;
+}
+
+.features h2 {
+    font-size: 2.5em;
+    color: #333;
+    margin-bottom: 40px;
+    font-weight: bold;
+}
+
+/* Highlight the section */
+.features {
+    background: linear-gradient(135deg, #e0e0e0, #f5f5f5);
+    border-radius: 12px;
+    padding: 40px 20px;
+    margin-bottom: 40px;
 }
 
 /* Form Section */
