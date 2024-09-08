@@ -99,18 +99,37 @@
         .delete-button:hover {
             background-color: #c82333;
         }
+        /* Style for Save Changes and Approve Buttons */
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
         input[type="submit"] {
             background-color: #28a745;
             color: white;
-            padding: 10px 20px;
+            padding: 8px 15px;
             border: none;
             border-radius: 4px;
             cursor: pointer;
-            width: 100%;
-            font-size: 16px;
+            font-size: 14px;
+            width: auto;
         }
         input[type="submit"]:hover {
             background-color: #218838;
+        }
+        #approveButton {
+            background-color: #007bff;
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            width: auto;
+        }
+        #approveButton:hover {
+            background-color: #0056b3;
         }
         #totalCourseTime {
             font-weight: bold;
@@ -136,7 +155,11 @@
 
         <div id="totalCourseTime">Total Course Time: 0 minutes</div>
 
-        <input type="submit" value="Save Changes">
+        <!-- Button container for Save Changes and Approve buttons -->
+        <div class="button-container">
+            <input type="submit" value="Save Changes">
+            <button id="approveButton">Approve</button>
+        </div>
     </form>
 </div>
 
@@ -272,7 +295,7 @@
 
     // Function to fetch course data from the backend API
     function fetchCourseData(responseId) {
-        fetch(`/api/get-course-data?response_id=${responseId}`)
+        fetch('course-data-2.json')           // fetch(`/api/get-course-data?response_id=${responseId}`)
             .then(response => response.json())
             .then(data => {
                 populateForm(data); // Populate form with data
@@ -336,6 +359,11 @@
             console.error('Error saving course data:', error);
         });
     };
+
+    // Handle "Approve" button click to redirect to course-overview.html
+    document.getElementById('approveButton').addEventListener('click', function() {
+        window.location.href = 'course-overview.html';
+    });
 </script>
 </body>
 </html>

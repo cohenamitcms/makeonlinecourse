@@ -61,6 +61,7 @@
             cursor: not-allowed;
         }
         .notes {
+            display: none;
             margin-top: 10px;
             padding: 5px;
             width: 100%;
@@ -135,7 +136,7 @@
 
                 // Add event listeners to the approve and regenerate buttons
                 document.getElementById(`approve-${lesson.lesson_number}`).addEventListener('click', () => approveLesson(lesson.lesson_number));
-                document.getElementById(`regenerate-${lesson.lesson_number}`).addEventListener('click', () => regenerateLesson(lesson.lesson_number));
+                document.getElementById(`regenerate-${lesson.lesson_number}`).addEventListener('click', () => toggleNotes(lesson.lesson_number));
             });
         } catch (error) {
             console.error('Error loading course data:', error);
@@ -153,16 +154,21 @@
         checkAllLessonsApproved();
     }
 
-    // Regenerate lesson script with notes
-    function regenerateLesson(lessonNumber) {
-        const notes = document.getElementById(`notes-${lessonNumber}`).value;
-        if (notes.trim() === "") {
-            alert('Please provide notes for the changes.');
-            return;
+    // Toggle notes visibility for regeneration
+    function toggleNotes(lessonNumber) {
+        const notesBox = document.getElementById(`notes-${lessonNumber}`);
+        if (notesBox.style.display === 'none' || notesBox.style.display === '') {
+            notesBox.style.display = 'block'; // Show the notes box
+        } else {
+            notesBox.style.display = 'none'; // Hide the notes box if already shown
         }
 
-        alert(`Lesson ${lessonNumber} will be regenerated with the following notes: ${notes}`);
-        // Here you could add logic to call an API or backend to regenerate the script
+        // Optionally, you can check for notes content and trigger a regenerate request
+        const notes = notesBox.value;
+        if (notes.trim()) {
+            alert(`Regenerating Lesson ${lessonNumber} with the following notes: ${notes}`);
+            // Here you could add logic to call an API or backend to regenerate the script
+        }
     }
 
     // Check if all lessons are approved

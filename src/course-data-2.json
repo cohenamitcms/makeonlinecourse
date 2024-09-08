@@ -1,0 +1,38 @@
+{
+  "courseTitle": "Blockchain Fundamentals",
+  "courseDescription": "An introductory course on blockchain technology and its applications.",
+  "modules": [
+    {
+      "name": "Introduction to Blockchain",
+      "time": "20 minutes",
+      "lessons": [
+        {
+          "name": "What is Blockchain?",
+          "time": "10 minutes",
+          "description": "An introduction to the basic concepts of blockchain."
+        },
+        {
+          "name": "History of Blockchain",
+          "time": "10 minutes",
+          "description": "A brief history of how blockchain technology developed."
+        }
+      ]
+    },
+    {
+      "name": "Blockchain Use Cases",
+      "time": "30 minutes",
+      "lessons": [
+        {
+          "name": "Blockchain in Finance",
+          "time": "15 minutes",
+          "description": "How blockchain is used in financial systems."
+        },
+        {
+          "name": "Blockchain in Supply Chain",
+          "time": "15 minutes",
+          "description": "The role of blockchain in improving supply chain transparency."
+        }
+      ]
+    }
+  ]
+}
