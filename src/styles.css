@@ -21,6 +21,36 @@ body {
 }
 
 /* Header Styling */
+.main-header {
+    background-color: #333;
+    color: white;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Left side of header (Home link) */
+.header-left .logo {
+    color: white;
+    font-size: 1.5em;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+/* Right side of header (other links) */
+.header-right a {
+    color: white;
+    margin-left: 20px;
+    text-decoration: none;
+    font-size: 1em;
+}
+
+.header-right a:hover {
+    color: #ddd;
+}
+
+/* Header Styling */
 .header {
     background-color: #333;
     color: #fff;

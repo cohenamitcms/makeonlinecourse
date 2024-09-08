@@ -76,3 +76,17 @@ max_courses int,
 max_lessons int,
 features string
 );
+
+*****************************************************************************
+                            TRANSACTION TABLE:
+*****************************************************************************
+create table moc_fact_trunsactions
+(
+user_id int not null,
+email string,
+datetime TIMESTAMP,
+plan varchar(25) not null,
+tran_id string not null PRIMARY KEY,
+payment_method varchar(25),
+status string
+);
