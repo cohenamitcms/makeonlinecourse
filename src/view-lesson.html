@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson Script</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .script {
+            background-color: #f7f9f9;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        h1 {
+            font-size: 24px;
+        }
+        a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+<h1 id="lesson-title">Lesson Title</h1>
+<div class="script" id="lesson-script">
+    <p>Lesson content will be displayed here.</p>
+</div>
+<a href="course-overview.html">Back to Course Overview</a>
+
+<script>
+    // Function to get query parameters from the URL
+    function getQueryParams() {
+        const params = new URLSearchParams(window.location.search);
+        return {
+            response_id: params.get('response_id'),
+            lesson_number: params.get('lesson_number')
+        };
+    }
+
+    // Simulate a lesson data set (Replace with dynamic fetching)
+    const lessonsData = {
+        "1.1": {
+            title: "Introduction to Blockchain",
+            script: "This is an introduction to blockchain technology, explaining the basic concepts and history behind it."
+        },
+        "1.2": {
+            title: "Blockchain History",
+            script: "This lesson covers the history and evolution of blockchain technology."
+        }
+    };
+
+    // Load lesson data based on lesson number from the query parameters
+    function loadLessonData() {
+        const { lesson_number } = getQueryParams(); // Extract the lesson_number
+
+        // Simulate fetching lesson data (in real case, this could be fetched from a server)
+        const lessonData = lessonsData[lesson_number];
+
+        if (lessonData) {
+            document.getElementById('lesson-title').innerText = `Lesson ${lesson_number}: ${lessonData.title}`;
+            document.getElementById('lesson-script').innerHTML = `<p>${lessonData.script}</p>`;
+        } else {
+            document.getElementById('lesson-title').innerText = 'Lesson not found';
+            document.getElementById('lesson-script').innerHTML = `<p>No lesson content available for this lesson.</p>`;
+        }
+    }
+
+    // Call the function to load lesson data on page load
+    loadLessonData();
+</script>
+</body>
+</html>

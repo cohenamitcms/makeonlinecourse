@@ -1,0 +1,78 @@
+*****************************************************************************
+                            USERS TABLE:
+*****************************************************************************
+
+create table moc_dim_users
+(
+user_id STRING not null PRIMARY KEY,
+email STRING not null,
+plan_id int,
+last_login TIMESTAMP default CURRENT_TIMESTAMP(),
+created_at timestamp DEFAULT CURRENT_TIMESTAMP(),
+course_sum int default 0,
+login_count int default 1
+);
+
+*****************************************************************************
+                            REQUESTS TABLE:
+*****************************************************************************
+
+create table moc_fact_requests
+(
+user_id string not null,
+response_id string not null PRIMARY key,
+response_time timestamp,
+course_title string not null,
+course_description string not null,
+level string not null,
+length string not null,
+gpt_prompt string,
+created_at timestamp not null DEFAULT CURRENT_TIMESTAMP(),
+status string
+);
+
+*****************************************************************************
+                            STRUCTURE TABLE:
+*****************************************************************************
+
+create table moc_fact_course_structure
+(
+user_id string not null,
+response_id string not null,
+type varchar(10) not null,
+number varchar(10) not null,
+title varchar(255) not null,
+description string null,
+length string null,
+PRIMARY KEY (response_id, title)
+);
+
+*****************************************************************************
+                            LESSONS TABLE:
+*****************************************************************************
+
+create table moc_fact_lessons
+(
+response_id string not null,
+course_title string not null,
+lesson_title string not null,
+lesson_number string not null,
+script string,
+length string,
+status varchar(50),
+PRIMARY KEY (response_id, lesson_number)
+);
+
+*****************************************************************************
+                            PLANS TABLE:
+*****************************************************************************
+
+create table moc_dim_plans
+(
+plan_id int not null PRIMARY KEY,
+plan_name varchar(25) not null,
+price DECIMAL,
+max_courses int,
+max_lessons int,
+features string
+);

@@ -1,0 +1,18 @@
+{
+  "course_title": "Blockchain Fundamentals",
+  "course_description": "An introductory course on blockchain technology.",
+  "lessons": [
+    {
+      "lesson_number": "1.1",
+      "course_lesson": "Introduction to Blockchain",
+      "description": "Overview of blockchain technology.",
+      "length": 5
+    },
+    {
+      "lesson_number": "1.2",
+      "course_lesson": "Blockchain History",
+      "description": "History and evolution of blockchain.",
+      "length": 10
+    }
+  ]
+}

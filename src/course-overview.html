@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Course Overview</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        h1 {
+            font-size: 24px;
+        }
+        h2 {
+            font-size: 20px;
+            color: #2c3e50;
+        }
+        h3 {
+            font-size: 18px;
+            color: #34495e;
+        }
+        .module {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #ecf0f1;
+            border-radius: 8px;
+        }
+        .lesson {
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #f7f9f9;
+            border: 1px solid #bdc3c7;
+            border-radius: 6px;
+        }
+        .approve, .regenerate, .generate-course {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 8px 12px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .regenerate {
+            background-color: #e74c3c;
+        }
+        .generate-course {
+            background-color: #2ecc71;
+        }
+        .approved {
+            background-color: #2ecc71;
+        }
+        .disabled {
+            background-color: #95a5a6;
+            cursor: not-allowed;
+        }
+        .notes {
+            margin-top: 10px;
+            padding: 5px;
+            width: 100%;
+            border: 1px solid #bdc3c7;
+            border-radius: 4px;
+            resize: vertical;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>Your Course: <span id="course-title"></span></h1>
+    <p id="course-description"></p>
+</header>
+
+<section id="modules-container">
+    <!-- Modules and lessons will be dynamically inserted here -->
+</section>
+
+<button id="generate-course-btn" class="generate-course disabled" disabled>Generate Course</button>
+
+<script>
+    const approvedLessons = {}; // Track approved lessons
+    let allLessonsApproved = false;
+
+    // Function to load course data from a local JSON file
+    async function loadCourseData() {
+        try {
+            // Fetching course data from local JSON file
+            const response = await fetch('course-data.json');
+            const courseData = await response.json();
+
+            // Populate the course title and description
+            document.getElementById('course-title').innerText = courseData.course_title;
+            document.getElementById('course-description').innerText = courseData.course_description;
+
+            const modulesContainer = document.getElementById('modules-container');
+            let currentModule = null;
+            let currentModuleDiv = null;
+
+            // Simulate a unique response_id for this course
+            const response_id = "ACYDBNhvROIoET6t9bdi5RID3i075A3sNTkku3zKdHjNx_2Gz0CB8SoAyrcz9X1xJePYlno";
+
+            // Group lessons by modules (assuming lesson_number starts with module index e.g., 1.1, 1.2)
+            courseData.lessons.forEach(lesson => {
+                const [moduleIndex] = lesson.lesson_number.split('.');
+
+                // Create new module if it's not the same as the previous one
+                if (!currentModule || currentModule !== moduleIndex) {
+                    currentModule = moduleIndex;
+                    currentModuleDiv = document.createElement('div');
+                    currentModuleDiv.classList.add('module');
+                    currentModuleDiv.innerHTML = `<h2>Module ${currentModule}</h2>`;
+                    modulesContainer.appendChild(currentModuleDiv);
+                }
+
+                // Create lesson entry within the module
+                const lessonDiv = document.createElement('div');
+                lessonDiv.classList.add('lesson');
+                lessonDiv.innerHTML = `
+                    <h3>Lesson ${lesson.lesson_number}: ${lesson.course_lesson}</h3>
+                    <p>Length: ${lesson.length} minutes</p>
+                    <p>Description: ${lesson.description}</p>
+                    <a href="view-lesson.html?response_id=${response_id}&lesson_number=${lesson.lesson_number}" target="_blank">View Lesson Script</a>
+                    <br>
+                    <button class="approve" id="approve-${lesson.lesson_number}">Confirm</button>
+                    <button class="regenerate" id="regenerate-${lesson.lesson_number}">Regenerate</button>
+                    <textarea id="notes-${lesson.lesson_number}" class="notes" placeholder="Write notes if you want to regenerate the script..."></textarea>
+                `;
+
+                currentModuleDiv.appendChild(lessonDiv);
+
+                // Add event listeners to the approve and regenerate buttons
+                document.getElementById(`approve-${lesson.lesson_number}`).addEventListener('click', () => approveLesson(lesson.lesson_number));
+                document.getElementById(`regenerate-${lesson.lesson_number}`).addEventListener('click', () => regenerateLesson(lesson.lesson_number));
+            });
+        } catch (error) {
+            console.error('Error loading course data:', error);
+        }
+    }
+
+    // Approve lesson
+    function approveLesson(lessonNumber) {
+        const approveButton = document.getElementById(`approve-${lessonNumber}`);
+        approveButton.classList.add('approved');
+        approveButton.innerText = 'Confirmed';
+        approveButton.disabled = true;
+
+        approvedLessons[lessonNumber] = true;
+        checkAllLessonsApproved();
+    }
+
+    // Regenerate lesson script with notes
+    function regenerateLesson(lessonNumber) {
+        const notes = document.getElementById(`notes-${lessonNumber}`).value;
+        if (notes.trim() === "") {
+            alert('Please provide notes for the changes.');
+            return;
+        }
+
+        alert(`Lesson ${lessonNumber} will be regenerated with the following notes: ${notes}`);
+        // Here you could add logic to call an API or backend to regenerate the script
+    }
+
+    // Check if all lessons are approved
+    function checkAllLessonsApproved() {
+        const totalLessons = document.querySelectorAll('.lesson').length;
+        const approvedCount = Object.keys(approvedLessons).length;
+
+        if (approvedCount === totalLessons) {
+            allLessonsApproved = true;
+            document.getElementById('generate-course-btn').classList.remove('disabled');
+            document.getElementById('generate-course-btn').disabled = false;
+        }
+    }
+
+    // Load course data on page load
+    loadCourseData();
+</script>
+</body>
+</html>
