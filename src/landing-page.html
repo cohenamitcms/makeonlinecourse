@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Make Online Course - Coming Soon</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+
+        header {
+            background-color: #333; /* Dark gray/black as in the original */
+            color: white;
+            padding: 40px 0;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+
+        p {
+            font-size: 18px;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 60px 0;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            width: 80%;
+            margin: 0 auto;
+        }
+
+        /* Features Section */
+        .features-container {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 40px;
+        }
+
+        .feature-item {
+            text-align: center;
+            flex: 1;
+            margin: 0 10px;
+        }
+
+        .feature-item i {
+            font-size: 40px;
+            margin-bottom: 15px;
+        }
+
+        /* How It Works Section */
+        .how-it-works {
+            text-align: center;
+            margin: 60px 0;
+            padding: 40px;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+        }
+
+        .how-it-works h2 {
+            font-size: 30px;
+            margin-bottom: 20px;
+        }
+
+        .video-placeholder {
+            background-color: #e0e0e0;
+            width: 80%;
+            height: 300px;
+            margin: 0 auto;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            color: #555;
+            border-radius: 10px;
+        }
+
+        /* Pricing Section */
+        .pricing {
+            text-align: center;
+            margin-top: 60px;
+            padding: 40px 0;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+        }
+
+        .pricing h2 {
+            font-size: 30px;
+            margin-bottom: 30px;
+        }
+
+        .pricing-container {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+
+        .pricing-card {
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            width: 30%;
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .pricing-card h3 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .pricing-card p {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .pricing-card .price {
+            font-size: 36px;
+            font-weight: bold;
+            color: #007bff;
+            margin-bottom: 10px;
+        }
+
+        .pricing-card .discount {
+            font-size: 18px;
+            color: #e74c3c;
+            text-decoration: line-through;
+        }
+
+        .pricing-card button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+        .pricing-card button:hover {
+            background-color: #0056b3;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 20px 0;
+        }
+
+        ul li {
+            font-size: 18px;
+            margin: 10px 0;
+        }
+
+        ul li i {
+            margin-right: 10px;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #333;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        .social-links {
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            color: white;
+            margin: 0 10px;
+            font-size: 20px;
+            text-decoration: none;
+        }
+
+        .social-links a:hover {
+            color: #007bff;
+        }
+
+        @media (max-width: 768px) {
+            /* Adjust header padding */
+            header {
+                padding: 20px 0;
+            }
+
+            /* Pricing cards stacking vertically */
+            .pricing-container {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            /* Reduce width of the pricing cards */
+            .pricing-card {
+                width: 90%;
+                margin-bottom: 20px;
+            }
+
+            /* Reduce font sizes for mobile */
+            h1 {
+                font-size: 28px;
+            }
+
+            h2 {
+                font-size: 24px;
+            }
+
+            .pricing-card h3 {
+                font-size: 20px;
+            }
+
+            .pricing-card .price {
+                font-size: 30px;
+            }
+
+            .pricing-card .discount {
+                font-size: 16px;
+            }
+
+            .feature-item i {
+                font-size: 30px;
+            }
+
+            p {
+                font-size: 16px;
+            }
+
+            /* Make buttons more mobile-friendly */
+            .buy-now {
+                padding: 8px 16px;
+                font-size: 14px;
+            }
+        }
+
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>Make Online Course</h1>
+    <p>We're working hard to bring you something amazing. Stay tuned!</p>
+</header>
+
+<main class="main-content">
+    <div class="container">
+        <!-- Features Section -->
+        <section id="features" class="features">
+            <h2>Benefits</h2>
+            <div class="features-container">
+                <div class="feature-item">
+                    <i class="fas fa-chalkboard-teacher"></i>
+                    <h3>Online Courses</h3>
+                    <p>Create Courses Effortlessly with AI</p>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-video"></i>
+                    <h3>Video Lessons</h3>
+                    <p>Create engaging video lessons with fully customizable scripts for each lesson</p>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-dollar-sign"></i>
+                    <h3>Start Making Money</h3>
+                    <p>Full Ownership and Immediate Profit Potential</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- How It Works Section -->
+        <section class="how-it-works">
+            <h2>How It Works</h2>
+            <div class="video-placeholder">
+                Video Coming Soon
+            </div>
+        </section>
+
+        <!-- Pricing Section -->
+        <section class="pricing">
+            <h2>Our Pricing Plans</h2>
+            <div class="pricing-container">
+                <div class="pricing-card">
+                    <h3>BASIC</h3>
+                    <p class="price">$99</p>
+                    <p class="discount">$200</p>
+                    <ul>
+                        <li><i class="fas fa-check"></i>1 Full Course</li>
+                        <li><i class="fas fa-check"></i>Content Ownership</li>
+                        <li><i class="fas fa-times"></i>Limited Support</li>
+                    </ul>
+                    <button>Buy Now</button>
+                </div>
+
+                <div class="pricing-card">
+                    <h3>STANDARD</h3>
+                    <p class="price">$199</p>
+                    <p class="discount">$600</p>
+                    <ul>
+                        <li><i class="fas fa-check"></i>3 Full Courses</li>
+                        <li><i class="fas fa-check"></i>Content Ownership</li>
+                        <li><i class="fas fa-times"></i>Limited Support</li>
+                    </ul>
+                    <button>Buy Now</button>
+                </div>
+
+                <div class="pricing-card">
+                    <h3>PREMIUM</h3>
+                    <p class="price">$999</p>
+                    <p class="discount">$2500</p>
+                    <ul>
+                        <li><i class="fas fa-check"></i>Unlimited Courses</li>
+                        <li><i class="fas fa-check"></i>Content Ownership</li>
+                        <li><i class="fas fa-check"></i>Full Support</li>
+                    </ul>
+                    <button>Buy Now</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Subscription Form Section -->
+        <section class="form-section" style="margin-top: 60px; text-align: center;">
+            <form id="subscribeForm" action="https://docs.google.com/forms/d/e/1FAIpQLSee4MibiQKjc4qJpYh-Ndw-f18o5SrQn3kIpQhHAtKXJsxVrg/formResponse" method="POST" target="_self">
+                <div class="form-group">
+                    <label for="email">Enter your email to stay updated:</label>
+                    <input type="email" id="email" name="entry.234720372" placeholder="Your email address" required>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="submit-button">Get Early Access</button>
+                </div>
+            </form>
+            <p id="thankYouMessage" style="display:none;">Thanks for supporting the website. Our team will keep you updated soon.</p>
+        </section>
+    </div>
+</main>
+
+<!-- Footer -->
+<footer>
+    <p>&copy; 2024 Amit Marmari</p>
+    <div class="social-links">
+        <a href="https://www.facebook.com/amit.marmari" target="_blank" aria-label="Facebook">
+            <i class="fab fa-facebook-f"></i>
+        </a>
+        <a href="https://www.instagram.com/amitmarmari" target="_blank" aria-label="Instagram">
+            <i class="fab fa-instagram"></i>
+        </a>
+        <a href="https://www.linkedin.com/in/amit-marmari/" target="_blank" aria-label="LinkedIn">
+            <i class="fab fa-linkedin-in"></i>
+        </a>
+    </div>
+</footer>
+
+<script>
+    document.getElementById("subscribeForm").addEventListener("submit", function(event){
+        event.preventDefault(); // Prevent the form from submitting the default way
+
+        const form = event.target;
+        const formData = new FormData(form);
+
+        // Send the form data to Google Forms
+        fetch(form.action, {
+            method: 'POST',
+            body: formData,
+            mode: 'no-cors'
+        }).then(() => {
+            // Show thank you message
+            document.getElementById('subscribeForm').style.display = 'none';
+            document.getElementById('thankYouMessage').style.display = 'block';
+        }).catch(error => {
+            console.error('Error submitting the form:', error);
+        });
+    });
+</script>
+
+</body>
+</html>
