@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+
+        header {
+            background-color: #333;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        main {
+            padding: 40px;
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+
+        .section {
+            margin-bottom: 30px;
+        }
+
+        .section h2 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .section p {
+            font-size: 18px;
+        }
+
+        .courses-list {
+            margin-top: 20px;
+            padding-left: 0;
+        }
+
+        .courses-list li {
+            list-style: none;
+            padding: 10px;
+            background-color: #f4f4f4;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .courses-list li button {
+            padding: 8px 12px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .courses-list li button:hover {
+            background-color: #0056b3;
+        }
+
+        .course-count {
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .upgrade-btn {
+            display: none;
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .upgrade-btn:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>User Profile</h1>
+</header>
+
+<main>
+    <!-- Section: User Information -->
+    <div class="section" id="user-info">
+        <h2>User Information</h2>
+        <p><strong>Email:</strong> <span id="user-email">Loading...</span></p>
+        <p><strong>Plan:</strong> <span id="user-plan">Loading...</span></p>
+    </div>
+
+    <!-- Section: Courses Created -->
+    <div class="section" id="user-courses">
+        <h2>Your Courses</h2>
+        <ul class="courses-list" id="courses-list">
+            <!-- Courses will be dynamically inserted here -->
+        </ul>
+    </div>
+
+    <!-- Section: Remaining Course Quota -->
+    <div class="section" id="remaining-courses">
+        <h2>Remaining Courses</h2>
+        <p>You have <span class="course-count" id="remaining-count">Loading...</span> course(s) remaining.</p>
+    </div>
+
+    <!-- Upgrade Button -->
+    <div id="upgrade-container">
+        <button class="upgrade-btn" id="upgrade-btn">Upgrade to Premium</button>
+    </div>
+</main>
+
+<script>
+    // Mock JSON data for testing without server-side connection
+    const mockData = {
+        "user": {
+            "email": "user@example.com",
+            "plan": "Standard",  // Free, Standard, Premium
+            "coursesCreated": [
+                { "id": 1, "title": "Intro to AI" }
+            ]
+        }
+    };
+
+    // Plan limits for course creation
+    const plans = {
+        Free: 1,
+        Standard: 1,
+        Premium: "Unlimited"
+    };
+
+    // Simulate loading the user profile
+    function loadUserProfile() {
+        const user = mockData.user;
+
+        // Populate user email and plan
+        document.getElementById('user-email').innerText = user.email;
+        document.getElementById('user-plan').innerText = user.plan;
+
+        // Populate the courses list
+        const coursesList = document.getElementById('courses-list');
+        coursesList.innerHTML = '';  // Clear existing content
+        user.coursesCreated.forEach(course => {
+            const courseItem = document.createElement('li');
+            courseItem.innerHTML = `
+                <span>${course.title}</span>
+                <button>View</button>
+            `;
+            coursesList.appendChild(courseItem);
+        });
+
+        // Calculate remaining courses based on plan
+        const remainingCoursesElement = document.getElementById('remaining-count');
+        const upgradeBtn = document.getElementById('upgrade-btn');
+
+        if (user.plan === 'Premium') {
+            remainingCoursesElement.innerText = 'Unlimited';
+            upgradeBtn.style.display = 'none';  // Hide upgrade button for Premium users
+        } else {
+            const totalAllowed = plans[user.plan];
+            const remainingCourses = totalAllowed - user.coursesCreated.length;
+            remainingCoursesElement.innerText = remainingCourses >= 0 ? remainingCourses : 0;
+
+            if (remainingCourses <= 0) {
+                // Show upgrade button if no courses remain
+                upgradeBtn.style.display = 'inline-block';
+            } else {
+                // Hide upgrade button if there are remaining courses
+                upgradeBtn.style.display = 'none';
+            }
+        }
+    }
+
+    // Load the user profile on page load
+    window.onload = loadUserProfile;
+</script>
+
+</body>
+</html>
