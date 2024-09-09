@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Processing...</title>
+    <style>
+        /* Basic Reset */
+        * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+        }
+
+        body {
+          font-family: Arial, sans-serif;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 100vh;
+          background-color: #f4f4f4;
+          margin: 0;
+        }
+
+        /* Centering container */
+        .progress-container {
+          width: 90%;
+          max-width: 400px;
+          text-align: center;
+          background-color: white;
+          padding: 20px;
+          border-radius: 10px;
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .progress-bar {
+          width: 100%;
+          background-color: #f3f3f3;
+          border-radius: 25px;
+          overflow: hidden;
+          margin-top: 20px;
+        }
+
+        .progress-bar-fill {
+          height: 30px;
+          background-color: #4caf50;
+          width: 0%;
+          text-align: center;
+          line-height: 30px;
+          color: white;
+          border-radius: 25px;
+          transition: width 0.4s ease;
+        }
+
+        #progress-text {
+          margin-top: 10px;
+          font-size: 16px;
+        }
+
+        @media (max-width: 600px) {
+          .progress-container {
+            width: 100%;
+            padding: 15px;
+          }
+
+          .progress-bar-fill {
+            height: 25px;
+            line-height: 25px;
+          }
+
+          #progress-text {
+            font-size: 14px;
+          }
+        }
+    </style>
+</head>
+<body>
+
+<div class="progress-container">
+    <h2>Processing your request</h2>
+    <div class="progress-bar">
+        <div class="progress-bar-fill" id="progress-bar-fill">0%</div>
+    </div>
+    <div id="progress-text">Waiting for your request to complete...</div>
+</div>
+
+<script>
+    function updateProgress(current, total) {
+      const percentage = (current / total) * 100;
+      const progressBarFill = document.getElementById('progress-bar-fill');
+      progressBarFill.style.width = percentage + '%';
+      progressBarFill.textContent = Math.round(percentage) + '%';
+
+      if (percentage === 100) {
+        document.getElementById('progress-text').textContent = "Process Complete!";
+        // Redirect after 2 seconds to course-overview.html
+        setTimeout(() => {
+          window.location.href = "course-overview.html";
+        }, 2000);
+      }
+    }
+
+    // Simulate progress for demonstration (this will be replaced with real Make.com updates)
+    let totalLoops = 10; // Replace this with the number of loops from Make.com
+    let currentLoop = 0;
+
+    // Simulating the progress with a 1-second interval (adjust this based on actual scenario timings)
+    const interval = setInterval(() => {
+      if (currentLoop < totalLoops) {
+        currentLoop++;
+        updateProgress(currentLoop, totalLoops);
+      } else {
+        clearInterval(interval);
+      }
+    }, 1000); // This will update every second for the simulation
+</script>
+
+</body>
+</html>
