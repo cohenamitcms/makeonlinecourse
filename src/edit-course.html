@@ -157,8 +157,8 @@
 
         <!-- Button container for Save Changes and Approve buttons -->
         <div class="button-container">
-            <input type="submit" value="Save Changes">
-            <button id="approveButton">Approve</button>
+            <input type="submit" value="Save Changes" id="saveChangesButton">
+            <button type="button" id="approveButton">Approve</button>
         </div>
     </form>
 </div>
@@ -169,7 +169,7 @@
         const lessonDivs = moduleDiv.getElementsByClassName('lesson');
         let totalMinutes = 0;
         for (let i = 0; i < lessonDivs.length; i++) {
-            const lessonTime = parseInt(lessonDivs[i].querySelector('.time-input input').value.replace(' minutes', ''));
+            const lessonTime = parseInt(lessonDivs[i].querySelector('.time-input input').value);
             if (!isNaN(lessonTime)) {
                 totalMinutes += lessonTime;
             }
@@ -197,6 +197,20 @@
             }
         }
         document.getElementById('totalCourseTime').innerText = `Total Course Time: ${totalCourseMinutes} minutes`;
+    }
+
+    // Function to renumber the lessons within a module after a lesson is deleted
+    function renumberLessons(moduleDiv) {
+        const lessonDivs = moduleDiv.getElementsByClassName('lesson');
+        for (let i = 0; i < lessonDivs.length; i++) {
+            const lessonHeader = lessonDivs[i].querySelector('.lesson-header');
+            lessonHeader.innerText = `Lesson ${i + 1}:`;
+        }
+    }
+
+    // Function to add lesson time to module and course time when clicking "Confirm"
+    function confirmLessonTime(moduleDiv) {
+        updateModuleTime(moduleDiv);
     }
 
     // Function to populate the form with the data fetched from the backend
@@ -259,13 +273,13 @@
                 const lessonTimeInput = document.createElement('input');
                 lessonTimeInput.type = 'number';
                 lessonTimeInput.className = 'time-input';
-                lessonTimeInput.value = lesson.time.replace(' minutes', '').trim();
+                lessonTimeInput.value = parseInt(lesson.time) || 0; // Assume time is in minutes
 
                 const confirmButton = document.createElement('button');
                 confirmButton.type = 'button';
                 confirmButton.className = 'confirm-button';
                 confirmButton.innerText = 'Confirm';
-                confirmButton.onclick = () => updateModuleTime(moduleDiv);
+                confirmButton.onclick = () => confirmLessonTime(moduleDiv);  // Add the lesson time to module and course time
 
                 const deleteLessonBtn = document.createElement('button');
                 deleteLessonBtn.type = 'button';
@@ -274,6 +288,7 @@
                 deleteLessonBtn.onclick = () => {
                     lessonDiv.remove();
                     updateModuleTime(moduleDiv);
+                    renumberLessons(moduleDiv); // Renumber lessons after deletion
                 };
 
                 lessonDiv.appendChild(lessonHeader);
@@ -312,8 +327,9 @@
     };
 
     // Handle form submission and save the updated course data
-    document.getElementById('courseForm').onsubmit = function(event) {
-        event.preventDefault();
+    document.getElementById('saveChangesButton').onclick = function(event) {
+        event.preventDefault();  // Prevent default form submission
+
         const courseData = {
             courseTitle: document.getElementById('courseTitle').value,
             courseDescription: document.getElementById('courseDescription').value,
@@ -335,7 +351,7 @@
                 const lessonInputs = lessonDiv.querySelectorAll('input');
                 moduleData.lessons.push({
                     name: lessonInputs[0].value.trim(),
-                    time: lessonInputs[1].value.trim() + ' minutes',
+                    time: lessonInputs[1].value.trim(),
                     description: lessonDiv.querySelector('.lesson-description').value // Include lesson description
                 });
             }
@@ -360,9 +376,12 @@
         });
     };
 
-    // Handle "Approve" button click to redirect to loading-lesson-content.html
+    // Handle "Approve" button click to redirect to loading-lesson-content.html with confirmation pop-up
     document.getElementById('approveButton').addEventListener('click', function() {
-        window.location.href = 'loading-lesson-content.html';
+        const confirmApproval = confirm("Are you sure you want to approve this course? You will not be able to edit this data later.");
+        if (confirmApproval) {
+            window.location.href = 'loading-lesson-content.html';
+        }
     });
 </script>
 </body>
